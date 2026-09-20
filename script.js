@@ -1,128 +1,158 @@
-/**
- * AI VÀO VIỆC 21 - JavaScript
- * Xử lý tương tác accordion FAQ, thanh CTA di động và cuộn trang mượt mà
- */
-
 document.addEventListener('DOMContentLoaded', () => {
-  // 1. XỬ LÝ ACCORDION CHO FAQ
-  const faqItems = document.querySelectorAll('.faq-item');
+  const revealItems = document.querySelectorAll('.reveal');
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  faqItems.forEach(item => {
-    const questionBtn = item.querySelector('.faq-question');
-    const answer = item.querySelector('.faq-answer');
+  if (!reducedMotion && 'IntersectionObserver' in window) {
+    try {
+      const revealObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        });
+      }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
 
-    questionBtn.addEventListener('click', () => {
-      const isActive = item.classList.contains('active');
+      revealItems.forEach((item) => revealObserver.observe(item));
+      document.documentElement.classList.add('motion-ready');
+    } catch (error) {
+      document.documentElement.classList.remove('motion-ready');
+      revealItems.forEach((item) => item.classList.add('is-visible'));
+    }
+  }
 
-      // Đóng tất cả các câu hỏi khác
-      faqItems.forEach(otherItem => {
-        if (otherItem !== item && otherItem.classList.contains('active')) {
-          otherItem.classList.remove('active');
-          const otherBtn = otherItem.querySelector('.faq-question');
-          const otherAnswer = otherItem.querySelector('.faq-answer');
-          otherBtn.setAttribute('aria-expanded', 'false');
-          otherAnswer.style.maxHeight = null;
-        }
-      });
+  const scrollyStory = document.querySelector('[data-scrolly]');
+  const scrollyViewport = window.matchMedia('(min-width: 901px) and (prefers-reduced-motion: no-preference)');
+  let scrollyObserver;
 
-      // Bật/tắt câu hỏi hiện tại
-      if (!isActive) {
-        item.classList.add('active');
-        questionBtn.setAttribute('aria-expanded', 'true');
-        answer.style.maxHeight = answer.scrollHeight + 40 + 'px';
-      } else {
-        item.classList.remove('active');
-        questionBtn.setAttribute('aria-expanded', 'false');
-        answer.style.maxHeight = null;
-      }
+  const setActiveScene = (step, animate = true) => {
+    if (!scrollyStory || !step) return;
+
+    const visual = scrollyStory.querySelector('[data-scrolly-visual]');
+    const panel = scrollyStory.querySelector('.scene-panel');
+    const label = scrollyStory.querySelector('[data-scene-label]');
+    const title = scrollyStory.querySelector('[data-scene-title]');
+    const detail = scrollyStory.querySelector('[data-scene-detail]');
+    const steps = scrollyStory.querySelectorAll('.scrolly-step');
+    const markers = scrollyStory.querySelectorAll('[data-scene-marker]');
+    const sceneId = step.dataset.scene;
+
+    steps.forEach((item) => item.classList.toggle('is-active', item === step));
+    markers.forEach((marker) => marker.classList.toggle('is-active', marker.dataset.sceneMarker === sceneId));
+
+    if (visual) visual.dataset.activeScene = sceneId;
+    if (label) label.textContent = step.dataset.label || '';
+    if (title) title.textContent = step.dataset.title || '';
+    if (detail) detail.textContent = step.dataset.detail || '';
+
+    if (animate && panel?.animate) {
+      panel.animate([
+        { opacity: 0.35, transform: 'translateY(8px)' },
+        { opacity: 1, transform: 'translateY(0)' }
+      ], { duration: 280, easing: 'cubic-bezier(.16, 1, .3, 1)' });
+    }
+  };
+
+  const configureScrolly = () => {
+    scrollyObserver?.disconnect();
+    scrollyObserver = undefined;
+
+    if (!scrollyStory) return;
+    scrollyStory.classList.remove('is-enhanced');
+
+    const steps = [...scrollyStory.querySelectorAll('.scrolly-step')];
+    setActiveScene(steps[0], false);
+
+    if (!scrollyViewport.matches || !('IntersectionObserver' in window)) return;
+
+    try {
+      scrollyObserver = new IntersectionObserver((entries) => {
+        const activeEntry = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => Math.abs(a.boundingClientRect.top - window.innerHeight * 0.45) - Math.abs(b.boundingClientRect.top - window.innerHeight * 0.45))[0];
+
+        if (activeEntry) setActiveScene(activeEntry.target);
+      }, { rootMargin: '-38% 0px -44% 0px', threshold: 0 });
+
+      steps.forEach((step) => scrollyObserver.observe(step));
+      scrollyStory.classList.add('is-enhanced');
+    } catch (error) {
+      scrollyStory.classList.remove('is-enhanced');
+      scrollyObserver?.disconnect();
+    }
+  };
+
+  configureScrolly();
+  scrollyViewport.addEventListener?.('change', configureScrolly);
+  window.addEventListener('pagehide', () => scrollyObserver?.disconnect(), { once: true });
+
+  const applicationUrl = document.body.dataset.applicationUrl?.trim();
+  const zaloUrl = document.body.dataset.zaloUrl?.trim();
+  const applicationLinks = document.querySelectorAll('[data-application-link]');
+  const applicationStatus = document.getElementById('application-status');
+
+  applicationLinks.forEach((link) => {
+    if (applicationUrl) {
+      link.href = applicationUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = 'Mở Google Form';
+      return;
+    }
+
+    if (zaloUrl) {
+      link.href = zaloUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      link.textContent = 'Nhận form qua Zalo';
+      return;
+    }
+
+    link.addEventListener('click', (event) => {
+      event.preventDefault();
+      if (!applicationStatus) return;
+      applicationStatus.textContent = 'Form ứng tuyển chưa được gắn. Điền URL vào data-application-url trong index.html trước khi xuất bản.';
+      applicationStatus.focus?.();
     });
   });
 
-  // Mặc định mở câu hỏi đầu tiên để người đọc dễ thấy
-  if (faqItems.length > 0) {
-    const firstItem = faqItems[0];
-    firstItem.classList.add('active');
-    const firstBtn = firstItem.querySelector('.faq-question');
-    const firstAnswer = firstItem.querySelector('.faq-answer');
-    firstBtn.setAttribute('aria-expanded', 'true');
-    firstAnswer.style.maxHeight = firstAnswer.scrollHeight + 40 + 'px';
-  }
+  const mobileCta = document.getElementById('mobileCta');
+  const hero = document.getElementById('hero');
+  const offer = document.getElementById('dang-ky');
 
-  // 2. XỬ LÝ THANH CTA CỐ ĐỊNH Ở ĐÁY MÀN HÌNH DI ĐỘNG
-  const mobileStickyCta = document.getElementById('mobileStickyCta');
-  const heroSection = document.getElementById('hero');
-  const finalCtaSection = document.getElementById('dang-ky');
+  if (mobileCta && hero && offer && 'IntersectionObserver' in window) {
+    let heroPassed = false;
+    let offerVisible = false;
+    let offerPassed = false;
 
-  if (mobileStickyCta && heroSection && finalCtaSection) {
-    const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
-      const finalCtaTop = finalCtaSection.offsetTop - window.innerHeight + 100;
-
-      // Hiện thanh CTA khi cuộn qua Hero và chưa tới khu vực đăng ký cuối trang
-      if (scrollY > heroBottom && scrollY < finalCtaTop) {
-        mobileStickyCta.classList.add('visible');
-      } else {
-        mobileStickyCta.classList.remove('visible');
-      }
+    const updateMobileCta = () => {
+      const visible = heroPassed && !offerVisible && !offerPassed;
+      mobileCta.classList.toggle('is-visible', visible);
+      mobileCta.setAttribute('aria-hidden', visible ? 'false' : 'true');
+      mobileCta.toggleAttribute('inert', !visible);
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
+    const heroObserver = new IntersectionObserver(([entry]) => {
+      heroPassed = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+      updateMobileCta();
+    }, { threshold: 0 });
+
+    const offerObserver = new IntersectionObserver(([entry]) => {
+      offerVisible = entry.isIntersecting;
+      offerPassed = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+      updateMobileCta();
+    }, { threshold: 0.12 });
+
+    heroObserver.observe(hero);
+    offerObserver.observe(offer);
   }
 
-  // 3. XỬ LÝ CUỘN MƯỢT CHO CÁC LIÊN KẾT NEO (#)
-  const anchorLinks = document.querySelectorAll('a[href^="#"]');
-  const header = document.querySelector('.site-header');
-  const headerHeight = header ? header.offsetHeight : 0;
-
-  anchorLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const targetId = link.getAttribute('href');
-      if (targetId === '#') return;
-
-      const targetEl = document.querySelector(targetId);
-      if (targetEl) {
-        e.preventDefault();
-        const elementPosition = targetEl.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerHeight - 12;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-
-  // 4. XỬ LÝ NÚT LIÊN KẾT PLACEHOLDER
-  const placeholderLinks = document.querySelectorAll('a[href*="[LINK"]');
-  placeholderLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      const href = link.getAttribute('href');
-      if (href.startsWith('[') && href.endsWith(']')) {
-        e.preventDefault();
-        alert(`Bạn đang bấm vào liên kết placeholder: ${href}\n\nSau khi bạn tạo link Google Form / Zalo thực tế, bạn chỉ cần thay giá trị này trong file index.html!`);
-      }
-    });
-  });
-
-  // 5. XỬ LÝ CHUYỂN ĐỔI TAB 3 ĐỒNG ĐỘI AI TRONG HERO INTERACTIVE DECK
-  const agentTabBtns = document.querySelectorAll('.agent-tab-btn');
-  const agentTabContents = document.querySelectorAll('.agent-tab-content');
-
-  agentTabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const targetAgent = btn.getAttribute('data-agent');
-
-      agentTabBtns.forEach(b => b.classList.remove('active'));
-      agentTabContents.forEach(c => c.classList.remove('active'));
-
-      btn.classList.add('active');
-      const targetContent = document.getElementById(targetAgent);
-      if (targetContent) {
-        targetContent.classList.add('active');
-      }
+  const faqItems = document.querySelectorAll('.faq-list details');
+  faqItems.forEach((item) => {
+    item.addEventListener('toggle', () => {
+      if (!item.open) return;
+      faqItems.forEach((otherItem) => {
+        if (otherItem !== item) otherItem.open = false;
+      });
     });
   });
 });
