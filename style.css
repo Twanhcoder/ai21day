@@ -703,9 +703,9 @@ h1 span {
 .price-panel ul { display: grid; gap: 11px; margin: 20px 0 0; padding: 0; list-style: none; }
 .price-panel li { position: relative; padding-left: 20px; color: color-mix(in srgb, var(--strong-ink) 82%, transparent); font-size: 0.86rem; }
 .price-panel li::before { content: "+"; position: absolute; left: 0; color: var(--accent); font-weight: 900; }
-.application-embed { overflow: hidden; margin-top: 26px; border: 1px solid color-mix(in srgb, var(--strong-ink) 20%, transparent); border-radius: var(--control-radius); background: var(--surface); }
+.application-embed { grid-column: 1 / -1; width: 100%; max-width: 780px; margin: 0 auto; overflow: hidden; border: 1px solid color-mix(in srgb, var(--strong-ink) 20%, transparent); border-radius: var(--control-radius); background: var(--surface); }
 .application-embed[hidden], .application-fallback[hidden] { display: none; }
-.application-embed iframe { display: block; width: 100%; min-height: 760px; border: 0; background: var(--surface); }
+.application-embed iframe { display: block; width: 100%; height: 3050px; border: 0; background: var(--surface); }
 .application-fallback { margin-top: 28px; }
 .application-fallback > p { margin: 12px 0 0; color: color-mix(in srgb, var(--strong-ink) 68%, transparent); font-size: 0.76rem; line-height: 1.5; }
 .application-status { min-height: 0; margin: 15px 0 0; color: var(--accent); font-size: 0.8rem; line-height: 1.45; }
@@ -883,7 +883,7 @@ h1 span {
   .price-panel { padding: 34px 28px; }
   .offer-copy h2, .offer-copy > p, .price-panel { max-width: 100%; overflow-wrap: anywhere; }
   .price-panel { width: 100%; }
-  .application-embed iframe { min-height: 860px; }
+  .application-embed iframe { height: 3950px; }
   .policy-grid { grid-template-columns: 1fr; }
   .policy-grid .policy-featured, .policy-grid article:last-child { grid-column: auto; }
   .policy-grid article, .policy-grid article:nth-child(3), .policy-grid article:nth-child(n + 3) { border-left: 0; border-top: 1px solid var(--line); }
