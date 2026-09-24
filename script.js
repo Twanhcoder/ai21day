@@ -86,16 +86,29 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('pagehide', () => scrollyObserver?.disconnect(), { once: true });
 
   const applicationUrl = document.body.dataset.applicationUrl?.trim();
+  const formEmbedUrl = document.body.dataset.formEmbedUrl?.trim();
   const zaloUrl = document.body.dataset.zaloUrl?.trim();
   const applicationLinks = document.querySelectorAll('[data-application-link]');
   const applicationStatus = document.getElementById('application-status');
+  const applicationEmbed = document.getElementById('application-embed');
+  const applicationFrame = document.getElementById('application-frame');
+  const applicationFallback = document.getElementById('application-fallback');
+
+  if (formEmbedUrl && applicationEmbed && applicationFrame) {
+    applicationFrame.src = formEmbedUrl;
+    applicationEmbed.hidden = false;
+    applicationFallback?.setAttribute('hidden', '');
+    applicationEmbed.closest('.price-panel')?.classList.add('has-embed');
+  }
 
   applicationLinks.forEach((link) => {
-    if (applicationUrl) {
-      link.href = applicationUrl;
+    const liveFormUrl = applicationUrl || formEmbedUrl;
+
+    if (liveFormUrl) {
+      link.href = liveFormUrl;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
-      link.textContent = 'Mở Google Form';
+      link.textContent = 'Mở form đăng ký 3 phút';
       return;
     }
 
@@ -103,14 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
       link.href = zaloUrl;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
-      link.textContent = 'Nhận form qua Zalo';
+      link.textContent = 'Nhận form đăng ký qua Zalo';
       return;
     }
 
     link.addEventListener('click', (event) => {
       event.preventDefault();
       if (!applicationStatus) return;
-      applicationStatus.textContent = 'Form ứng tuyển chưa được gắn. Điền URL vào data-application-url trong index.html trước khi xuất bản.';
+      applicationStatus.textContent = 'Form đăng ký chưa được gắn. Điền URL vào data-application-url hoặc data-form-embed-url trong index.html trước khi xuất bản.';
       applicationStatus.focus?.();
     });
   });
