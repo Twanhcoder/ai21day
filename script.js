@@ -90,19 +90,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const zaloUrl = document.body.dataset.zaloUrl?.trim();
   const applicationLinks = document.querySelectorAll('[data-application-link]');
   const applicationStatus = document.getElementById('application-status');
-  const applicationEmbed = document.getElementById('application-embed');
+  const applicationDialog = document.getElementById('application-dialog');
   const applicationFrame = document.getElementById('application-frame');
-  const applicationFallback = document.getElementById('application-fallback');
+  const canUseDialog = Boolean(formEmbedUrl && applicationFrame && applicationDialog?.showModal);
 
-  if (formEmbedUrl && applicationEmbed && applicationFrame) {
-    applicationFrame.src = formEmbedUrl;
-    applicationEmbed.hidden = false;
-    applicationFallback?.setAttribute('hidden', '');
-    applicationEmbed.closest('.offer-layout')?.querySelector('.price-panel')?.classList.add('has-embed');
+  const openApplicationDialog = () => {
+    if (!applicationFrame.getAttribute('src')) applicationFrame.src = formEmbedUrl;
+    applicationDialog.showModal();
+  };
+
+  if (canUseDialog) {
+    applicationDialog.querySelector('[data-dialog-close]')?.addEventListener('click', () => applicationDialog.close());
+    applicationDialog.addEventListener('click', (event) => {
+      if (event.target === applicationDialog) applicationDialog.close();
+    });
   }
 
   applicationLinks.forEach((link) => {
     const liveFormUrl = applicationUrl || formEmbedUrl;
+
+    if (canUseDialog) {
+      link.href = liveFormUrl;
+      link.textContent = 'Mở form đăng ký 3 phút';
+      link.addEventListener('click', (event) => {
+        if (event.metaKey || event.ctrlKey || event.shiftKey) return;
+        event.preventDefault();
+        openApplicationDialog();
+      });
+      return;
+    }
 
     if (liveFormUrl) {
       link.href = liveFormUrl;

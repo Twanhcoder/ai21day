@@ -384,11 +384,16 @@
           <p class="application-status" id="application-status" role="status" aria-live="polite" tabindex="-1"></p>
           <p class="price-note">Không cần thanh toán khi gửi form. Thông tin chỉ được dùng để đánh giá mức phù hợp và liên hệ về chương trình.</p>
         </aside>
-        <div class="application-embed" id="application-embed" hidden>
-          <iframe id="application-frame" title="Form đăng ký Founding Cohort 21AISYSTEM" loading="lazy">Đang tải form đăng ký</iframe>
-        </div>
       </div>
     </section>
+
+    <dialog class="application-dialog" id="application-dialog" aria-labelledby="application-dialog-title">
+      <div class="application-dialog-head">
+        <strong id="application-dialog-title">Đăng ký Founding Cohort 21AISYSTEM</strong>
+        <button class="application-dialog-close" type="button" data-dialog-close aria-label="Đóng form">&times;</button>
+      </div>
+      <iframe id="application-frame" title="Form đăng ký Founding Cohort 21AISYSTEM">Đang tải form đăng ký</iframe>
+    </dialog>
 
     <section class="section launch-policies" id="chinh-sach">
       <div class="container policy-layout">
