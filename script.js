@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applicationFrame.src = formEmbedUrl;
     applicationEmbed.hidden = false;
     applicationFallback?.setAttribute('hidden', '');
-    applicationEmbed.closest('.price-panel')?.classList.add('has-embed');
+    applicationEmbed.closest('.offer-layout')?.querySelector('.price-panel')?.classList.add('has-embed');
   }
 
   applicationLinks.forEach((link) => {
