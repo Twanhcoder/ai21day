@@ -1,6 +1,118 @@
 document.addEventListener('DOMContentLoaded', () => {
   const revealItems = document.querySelectorAll('.reveal');
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const scrambleChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+
+  const initEntranceScramble = () => {
+    const items = document.querySelectorAll('[data-scramble-in]');
+
+    items.forEach((item) => {
+      const original = item.textContent;
+      item.textContent = reducedMotion ? original : '\u00a0';
+      if (reducedMotion) return;
+
+      window.setTimeout(() => {
+        let frame = 0;
+        const timer = window.setInterval(() => {
+          const revealed = frame * 0.55;
+          item.textContent = [...original].map((char, index) => {
+            if (char === ' ') return ' ';
+            if (index < revealed) return char;
+            if (index < revealed + 3) return scrambleChars[Math.floor(Math.random() * scrambleChars.length)];
+            return '';
+          }).join('');
+          frame += 1;
+
+          if (revealed >= original.length) {
+            item.textContent = original;
+            window.clearInterval(timer);
+          }
+        }, 25);
+      }, Number(item.dataset.scrambleIn) || 0);
+    });
+  };
+
+  const initCinematic = () => {
+    const section = document.querySelector('[data-cinematic]');
+    const text = section?.querySelector('[data-cinematic-text]');
+    if (!section || !text || reducedMotion || !('IntersectionObserver' in window)) return;
+
+    const stiffness = 15;
+    const damping = 32;
+    const mass = 1.8;
+    let position = 0;
+    let velocity = 0;
+    let lastTime = performance.now();
+    let frameId;
+
+    const progress = () => {
+      const rect = section.getBoundingClientRect();
+      return Math.min(1, Math.max(0, (window.innerHeight - rect.top) / (window.innerHeight + rect.height)));
+    };
+
+    const render = (now) => {
+      const delta = Math.min(0.064, (now - lastTime) / 1000);
+      lastTime = now;
+      const acceleration = (-stiffness * (position - progress()) - damping * velocity) / mass;
+      velocity += acceleration * delta;
+      position += velocity * delta;
+
+      const y = 62 - 132 * position;
+      const opacity = Math.min(1, Math.max(0, (position - 0.26) / 0.24));
+      text.style.transform = `rotateX(20deg) translateY(${y.toFixed(2)}px) translateZ(15px)`;
+      text.style.opacity = opacity.toFixed(3);
+      frameId = requestAnimationFrame(render);
+    };
+
+    const observer = new IntersectionObserver(([entry]) => {
+      cancelAnimationFrame(frameId);
+      section.classList.toggle('is-animating', entry.isIntersecting);
+      if (!entry.isIntersecting) return;
+      position = progress();
+      lastTime = performance.now();
+      frameId = requestAnimationFrame(render);
+    }, { threshold: 0.02 });
+
+    observer.observe(section);
+    window.addEventListener('pagehide', () => {
+      cancelAnimationFrame(frameId);
+      observer.disconnect();
+    }, { once: true });
+  };
+
+  const initVideoVisibility = () => {
+    const videos = [...document.querySelectorAll('video[data-autopause]')];
+    if (!videos.length) return;
+
+    if (reducedMotion || navigator.connection?.saveData || !('IntersectionObserver' in window)) {
+      videos.forEach((video) => video.pause());
+      return;
+    }
+
+    const visibleVideos = new Set();
+    const syncPlayback = () => {
+      videos.forEach((video) => {
+        if (visibleVideos.has(video) && !document.hidden) video.play().catch(() => {});
+        else video.pause();
+      });
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) visibleVideos.add(entry.target);
+        else visibleVideos.delete(entry.target);
+      });
+      syncPlayback();
+    }, { threshold: 0.12 });
+
+    videos.forEach((video) => observer.observe(video));
+    document.addEventListener('visibilitychange', syncPlayback);
+    window.addEventListener('pagehide', () => observer.disconnect(), { once: true });
+  };
+
+  initEntranceScramble();
+  initCinematic();
+  initVideoVisibility();
 
   if (!reducedMotion && 'IntersectionObserver' in window) {
     try {
