@@ -11,7 +11,7 @@
     { id: 'student', label: 'Sinh viên', text: STUDENT_TEXT },
     { id: 'graduate', label: 'Mới ra trường', text: STUDENT_TEXT },
     { id: 'worker', label: 'Đã đi làm, muốn làm thêm freelance', text: 'Chương trình thiết kế cho sinh viên sắp và mới ra trường. Nếu bạn chưa có khách freelance nào và có 2 giờ mỗi ngày, cứ điền form, hai bên trao đổi xem có hợp không. Bạn đang băn khoăn chuyện gì nhất?' },
-    { id: 'owner', label: 'Chủ doanh nghiệp', text: '21AISYSTEM dành cho người đi tìm khách freelance đầu tiên, nên chưa hợp với bạn. Nếu bạn muốn tự dùng AI cho doanh nghiệp, nhóm Zalo Digital Brain có chia sẻ miễn phí.' }
+    { id: 'owner', label: 'Chủ doanh nghiệp', text: '21AISYSTEM là chương trình dành cho người đi tìm khách freelance đầu tiên. Nếu bạn là doanh nghiệp, bạn nhắn trực tiếp Tuấn Anh qua Zalo để được tư vấn thêm nhé.' }
   ];
 
   const GROUPS = [
@@ -184,7 +184,7 @@
   const chooseRole = (role) => {
     track('chat_role', { id: role.id });
     say(role.text);
-    if (role.id === 'owner') offer([groupChip, { label: 'Xem câu hay hỏi', run: showMenu }]);
+    if (role.id === 'owner') offer([{ label: 'Nhắn Zalo Tuấn Anh', href: zaloUrl, action: 'chat_owner_zalo' }, { label: 'Xem câu hay hỏi', run: showMenu }]);
     else showMenu();
   };
 

@@ -13,7 +13,7 @@ Bạn đang là: Sinh viên · Mới ra trường · Đã đi làm, muốn làm 
 
 - **Sinh viên / Mới ra trường:** Đúng người chương trình dành cho. Ngành nào cũng được, ngành bạn học chính là ngách khách đầu tiên của bạn. Bạn đang băn khoăn chuyện gì nhất?
 - **Đã đi làm:** Chương trình thiết kế cho sinh viên sắp và mới ra trường. Nếu bạn chưa có khách freelance nào và có 2 giờ mỗi ngày, cứ điền form, hai bên trao đổi xem có hợp không. Bạn đang băn khoăn chuyện gì nhất?
-- **Chủ doanh nghiệp:** 21AISYSTEM dành cho người đi tìm khách freelance đầu tiên, nên chưa hợp với bạn. Nếu bạn muốn tự dùng AI cho doanh nghiệp, nhóm Zalo Digital Brain có chia sẻ miễn phí. (nút vào nhóm)
+- **Chủ doanh nghiệp:** 21AISYSTEM là chương trình dành cho người đi tìm khách freelance đầu tiên. Nếu bạn là doanh nghiệp, bạn nhắn trực tiếp Tuấn Anh qua Zalo để được tư vấn thêm nhé. (nút Nhắn Zalo Tuấn Anh, nút Xem câu hay hỏi)
 
 Nhóm câu hỏi: Mình có hợp không · Học gì, làm gì · Học phí và rủi ro · Chuẩn bị và sau 21 ngày
 
