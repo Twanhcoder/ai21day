@@ -4,3 +4,7 @@ Thumbs.db
 .vscode/
 .idea/
 node_modules/
+
+# Day 9: data bán hàng và brain.db chỉ để local, repo này public
+data/
+brain.db

@@ -1,0 +1,169 @@
+/* Trợ lý tư vấn 21AISYSTEM (chat.js). Dùng token màu của course.css */
+.chatbot .visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.chatbot-launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 60;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: rgba(13, 10, 16, 0.92);
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 16px 40px rgba(5, 4, 7, 0.5);
+  transition: transform 220ms var(--ease-out), border-color 180ms ease;
+}
+
+.chatbot-launcher i { color: var(--pink); font-size: 1.05rem; }
+.chatbot-launcher:hover { transform: translateY(-3px); border-color: rgba(247, 245, 248, 0.5); }
+.chatbot.is-open .chatbot-launcher { opacity: 0; pointer-events: none; }
+
+.chatbot-panel {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 61;
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100vw - 32px));
+  height: min(600px, calc(100dvh - 48px));
+  border: 1px solid var(--line);
+  border-radius: var(--surface-radius);
+  background: var(--surface);
+  box-shadow: 0 28px 70px rgba(5, 4, 7, 0.6);
+  overflow: hidden;
+}
+
+.chatbot-panel[hidden] { display: none; }
+
+.chatbot-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+}
+
+.chatbot-head strong, .chatbot-head span { display: block; }
+.chatbot-head strong { font-size: 0.86rem; }
+.chatbot-head span { color: var(--ink-soft); font-size: 0.68rem; }
+
+.chatbot-close {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: var(--control-radius);
+  background: transparent;
+  color: var(--ink);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.chatbot-log {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.chatbot-msg {
+  max-width: 88%;
+  margin: 0;
+  padding: 10px 13px;
+  border-radius: 14px;
+  font-size: 0.8rem;
+  line-height: 1.55;
+}
+
+.chatbot-msg-bot { align-self: flex-start; border-bottom-left-radius: 4px; background: var(--surface-2); border: 1px solid var(--line); }
+.chatbot-msg-user { align-self: flex-end; border-bottom-right-radius: 4px; background: var(--ink); color: var(--canvas); }
+
+.chatbot-options { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.chatbot-chip {
+  padding: 8px 12px;
+  border: 1px solid rgba(232, 107, 160, 0.55);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font: inherit;
+  font-size: 0.74rem;
+  line-height: 1.35;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.chatbot-chip:hover { border-color: var(--pink); background: rgba(232, 107, 160, 0.12); }
+
+.chatbot-input {
+  display: flex;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid var(--line);
+}
+
+.chatbot-input input {
+  flex: 1;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--control-radius);
+  background: var(--canvas);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+}
+
+.chatbot-input button {
+  width: 40px;
+  border: 0;
+  border-radius: var(--control-radius);
+  background: var(--pink);
+  color: var(--canvas);
+  cursor: pointer;
+}
+
+.chatbot-foot {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 0 12px 12px;
+}
+
+.chatbot-foot .button { width: 100%; padding-inline: 10px; }
+
+@media (max-width: 680px) {
+  /* Chỉ hiện cùng thanh CTA cố định (sau hero), nằm ngay trên thanh đó để không che nút nào */
+  .chatbot-launcher { right: 12px; bottom: 84px; min-height: 44px; padding: 0 15px; opacity: 0; pointer-events: none; transform: translateY(20px); transition: opacity 240ms ease, transform 360ms var(--ease-out); }
+  .mobile-cta.is-visible ~ .chatbot:not(.is-open) .chatbot-launcher { opacity: 1; pointer-events: auto; transform: none; }
+  .chatbot-panel { right: 0; bottom: 0; left: 0; width: 100%; height: min(88dvh, 640px); border-radius: var(--surface-radius) var(--surface-radius) 0 0; }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .chatbot-launcher { backdrop-filter: none; background: var(--surface); }
+}
