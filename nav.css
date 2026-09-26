@@ -109,6 +109,12 @@
   .menu-open .logo-pill { display: none; }
 }
 
+/* Phones: a fixed blurred bar over video is the most expensive thing to scroll, use a flat tint */
+@media (max-width: 767px), (hover: none) {
+  .pill { background: rgba(38, 34, 42, .86); -webkit-backdrop-filter: none; backdrop-filter: none; }
+  .logo-pill:hover { background: rgba(52, 47, 57, .9); }
+}
+
 @media (max-width: 639px) {
   .nav-inner { padding: 0 16px; gap: 6px; }
   .nav-left { flex: 1; gap: 6px; }

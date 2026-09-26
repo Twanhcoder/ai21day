@@ -37,9 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const text = section?.querySelector('[data-cinematic-text]');
     if (!section || !text || reducedMotion || !('IntersectionObserver' in window)) return;
 
-    const stiffness = 15;
-    const damping = 32;
-    const mass = 1.8;
+    // Near critically damped: follows scroll in ~0.4s instead of lagging ~2s behind
+    const stiffness = 120;
+    const damping = 22;
+    const mass = 1;
     let position = 0;
     let velocity = 0;
     let lastTime = performance.now();
@@ -58,7 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
       position += velocity * delta;
 
       const y = 62 - 132 * position;
-      const opacity = Math.min(1, Math.max(0, (position - 0.26) / 0.24));
+      // Fully visible once the section's top reaches mid-screen
+      const opacity = Math.min(1, Math.max(0, (position - 0.05) / 0.2));
       text.style.transform = `rotateX(20deg) translateY(${y.toFixed(2)}px) translateZ(15px)`;
       text.style.opacity = opacity.toFixed(3);
       frameId = requestAnimationFrame(render);

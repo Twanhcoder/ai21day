@@ -37,9 +37,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton+SC&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="/nav.css?v=20260926">
-  <link rel="stylesheet" href="/home.css?v=20260926-6">
-  <link rel="stylesheet" href="/scroll-fx.css">
+  <link rel="stylesheet" href="/nav.css?v=20260926-2">
+  <link rel="stylesheet" href="/home.css?v=20260926-8">
+  <link rel="stylesheet" href="/scroll-fx.css?v=20260926">
   <script>
     document.documentElement.classList.add('js', 'nav-intro');
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
@@ -65,7 +65,7 @@
     <div class="nav-inner">
       <div class="nav-left">
         <a class="pill logo-pill" href="/" aria-label="21AISYSTEM, trang chủ">
-          <img class="brand-mascot" src="/assets/21ai-mascot.png" width="28" height="28" alt="" aria-hidden="true">
+          <img class="brand-mascot" src="/assets/21ai-mascot.webp" width="28" height="28" alt="" aria-hidden="true">
           <span>21AISYSTEM</span>
         </a>
         <div class="pill menu-pill" id="menuPill">
@@ -89,8 +89,10 @@
   <main id="main">
     <!-- SECTION 1: HERO -->
     <section class="hero screen" id="hero">
-      <video class="bg-video" id="heroVideo" muted playsinline preload="auto" poster="/assets/hero-poster.jpg" aria-hidden="true"
-        src="/assets/video/hero.mp4"></video>
+      <video class="bg-video" id="heroVideo" muted playsinline preload="auto" poster="/assets/hero-poster.jpg" aria-hidden="true">
+        <source src="/assets/video/hero-m.mp4" media="(max-width: 767px)" type="video/mp4">
+        <source src="/assets/video/hero.mp4" type="video/mp4">
+      </video>
       <div class="dot-grid" aria-hidden="true"></div>
       <div class="hero-fade">
         <div class="watermark" aria-hidden="true">VU TUAN ANH</div>
@@ -194,9 +196,9 @@
 
     <!-- PRESERVED VIDEO SECTION: METRICS -->
     <section class="legacy-metrics screen" id="con-so">
-      <video class="bg-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true"
+      <video class="bg-video" autoplay muted loop playsinline preload="none" aria-hidden="true"
         poster="/assets/course-metrics-cinematic-v2.webp"
-        src="/assets/video/metrics.mp4"></video>
+        data-src="/assets/video/metrics.mp4" data-src-mobile="/assets/video/metrics-m.mp4"></video>
       <div class="legacy-metrics-inner">
         <h2 class="eyebrow inview fade" style="--dur:1.2s">21AISYSTEM trong ba con số</h2>
         <div class="legacy-metrics-grid">
@@ -226,9 +228,9 @@
 
     <!-- PRESERVED VIDEO SECTION: HOW I WORK -->
     <section class="legacy-tech screen" id="cach-lam">
-      <video class="bg-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true"
+      <video class="bg-video" autoplay muted loop playsinline preload="none" aria-hidden="true"
         poster="/assets/course-roadmap-cinematic-v2.webp"
-        src="/assets/video/roadmap.mp4"></video>
+        data-src="/assets/video/roadmap.mp4" data-src-mobile="/assets/video/roadmap-m.mp4"></video>
       <div class="legacy-tech-inner">
         <div class="legacy-tech-top">
           <h2 class="legacy-tech-title inview fade-up" style="--y:40px;--dur:1s">Làm thật<br>Đo thật</h2>
@@ -304,9 +306,9 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-video">
-      <video class="bg-video" autoplay muted loop playsinline preload="metadata" aria-hidden="true"
+      <video class="bg-video" autoplay muted loop playsinline preload="none" aria-hidden="true"
         poster="/assets/course-closing-cinematic-v2.webp"
-        src="/assets/video/closing.mp4"></video>
+        data-src="/assets/video/closing.mp4" data-src-mobile="/assets/video/closing-m.mp4"></video>
     </div>
     <div class="footer-body">
       <div>
@@ -326,7 +328,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js" defer></script>
   <script src="/nav.js?v=20260926" defer></script>
-  <script src="/home.js?v=20260926-4" defer></script>
-  <script src="/scroll-fx.js" defer></script>
+  <script src="/home.js?v=20260926-6" defer></script>
+  <script src="/scroll-fx.js?v=20260926" defer></script>
 </body>
 </html>

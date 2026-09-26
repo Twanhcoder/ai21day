@@ -228,6 +228,21 @@ html.lenis, html.lenis body { height: auto; }
   .final-actions { flex-direction: column; }
 }
 
+/* Touch devices skip Lenis, so menu links fall back to native smooth scrolling */
+html:not(.lenis) { scroll-behavior: smooth; }
+
+/* Phones: backdrop blur over playing video re-renders every frame, use a flat tint instead */
+@media (hover: none), (pointer: coarse) {
+  /* The llama stays visible even if the hero video never starts or blanks out */
+  .hero { background: var(--bg) url("/assets/hero-poster.jpg") center / cover no-repeat; }
+  #heroVideo { opacity: 0; transition: opacity .4s ease; }
+  #heroVideo.is-playing { opacity: 1; }
+}
+
+@media (max-width: 767px), (hover: none) {
+  .home-button-ghost { background: rgba(20, 16, 22, .78); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; transition-delay: 0s !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; }
   .js .cinematic-text { transform: none; opacity: 1; }

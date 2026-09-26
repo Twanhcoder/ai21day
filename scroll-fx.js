@@ -91,7 +91,9 @@
     });
 
     // ---------- Parallax media ----------
-    const media = reducedMotion ? [] : [...document.querySelectorAll('main section video, main section [class*="media"] img')]
+    // Skipped on touch devices: moving and rescaling full-screen video every scroll frame stutters on phones
+    const isTouch = window.matchMedia('(hover: none), (pointer: coarse)').matches;
+    const media = reducedMotion || isTouch ? [] : [...document.querySelectorAll('main section video, main section [class*="media"] img')]
       .filter((el) => !el.closest('.scrolly-visual'))
       .map((el) => {
         const host = el.closest('section');

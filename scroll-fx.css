@@ -34,6 +34,11 @@
 .fx-parallax { will-change: transform; transform: translate3d(0, var(--fx-y, 0px), 0) scale(1.12); }
 .fx-clip { overflow: clip; }
 
+/* Phones: animating blur on dozens of elements drops frames on iOS, keep fade + lift only */
+@media (max-width: 767px), (hover: none) {
+  .fx-ready .fx-reveal { filter: none; transition-property: opacity, transform; }
+}
+
 /* Reduced motion: keep gentle opacity fades, drop movement and blur */
 @media (prefers-reduced-motion: reduce) {
   .fx-ready .fx-reveal, .fx-ready .fx-words .fx-word { transform: none; filter: none; transition: opacity .8s ease var(--fx-d, 0ms); }
