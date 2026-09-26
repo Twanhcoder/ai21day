@@ -128,7 +128,10 @@
       const y = 60 - 180 * pos;
       // Fully visible once the section's top reaches mid-screen, not when it is half scrolled past
       const opacity = Math.min(1, Math.max(0, (pos - 0.05) / 0.2));
-      text.style.transform = `rotateX(24deg) translateY(${y.toFixed(2)}px) translateZ(15px)`;
+      // No 3D tilt on phones: on a narrow, tall block it skews the text and pushes lines off-screen
+      text.style.transform = isSmall
+        ? `translateY(${(y * 0.4).toFixed(2)}px)`
+        : `rotateX(24deg) translateY(${y.toFixed(2)}px) translateZ(15px)`;
       text.style.opacity = opacity.toFixed(3);
 
       if (!visible || (Math.abs(goal - pos) < 0.0005 && Math.abs(vel) < 0.0005)) { running = false; return; }

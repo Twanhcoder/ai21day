@@ -618,6 +618,7 @@ html:has(.application-dialog[open]) { overflow: hidden; }
   .course-watermark { top: 34%; }
   .course-cinematic-wrap { width: calc(100% - 32px); }
   .course-cinematic-text { font-size: clamp(1.45rem, 6.8vw, 2.15rem); }
+  .js .course-cinematic-text { transform: translateY(24px); }
   .course-metrics-inner { padding-block: 90px; }
   .course-metrics h2 { margin-bottom: 54px; }
   .course-metrics-grid { grid-template-columns: 1fr; gap: 48px; }

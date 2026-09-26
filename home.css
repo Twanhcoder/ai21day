@@ -232,6 +232,10 @@ html.lenis, html.lenis body { height: auto; }
 html:not(.lenis) { scroll-behavior: smooth; }
 
 /* Phones: backdrop blur over playing video re-renders every frame, use a flat tint instead */
+@media (max-width: 767px) {
+  .js .cinematic-text { transform: translateY(24px); }
+}
+
 @media (hover: none), (pointer: coarse) {
   /* The llama stays visible even if the hero video never starts or blanks out */
   .hero { background: var(--bg) url("/assets/hero-poster.jpg") center / cover no-repeat; }

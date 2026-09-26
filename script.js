@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!section || !text || reducedMotion || !('IntersectionObserver' in window)) return;
 
     // Near critically damped: follows scroll in ~0.4s instead of lagging ~2s behind
+    const isSmall = window.matchMedia('(max-width: 767px)').matches;
     const stiffness = 120;
     const damping = 22;
     const mass = 1;
@@ -61,7 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
       const y = 62 - 132 * position;
       // Fully visible once the section's top reaches mid-screen
       const opacity = Math.min(1, Math.max(0, (position - 0.05) / 0.2));
-      text.style.transform = `rotateX(20deg) translateY(${y.toFixed(2)}px) translateZ(15px)`;
+      // No 3D tilt on phones: on a narrow, tall block it skews the text and pushes lines off-screen
+      text.style.transform = isSmall
+        ? `translateY(${(y * 0.4).toFixed(2)}px)`
+        : `rotateX(20deg) translateY(${y.toFixed(2)}px) translateZ(15px)`;
       text.style.opacity = opacity.toFixed(3);
       frameId = requestAnimationFrame(render);
     };
