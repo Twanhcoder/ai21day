@@ -3,7 +3,7 @@
 Nguồn: `AtomOS/my-brain/data` (products, faq, objections, customers) và brand voice trong `brain.db`. Cập nhật 2026-09-26.
 Bản chạy thật nằm trong `chat.js`. Sửa ở đây thì sửa cả `chat.js`.
 
-Luật: xưng "mình", gọi "bạn". Không em dash, không emoji, không hứa thu nhập. Không nói có học viên. Không nói "không cần biết code". Câu nào ngoài kịch bản thì chuyển sang Zalo.
+Luật: xưng "mình", gọi "bạn". Không em dash, không emoji, không hứa thu nhập. Không bịa số học viên hay feedback học viên. Không nói "không cần biết code". Câu nào ngoài kịch bản thì chuyển sang Zalo.
 
 ## 1. Câu chào
 
@@ -29,7 +29,7 @@ Nút: Vào nhóm Digital Brain
 ## 2. Mười câu hay hỏi
 
 **1. Học phí bao nhiêu?**
-> Founding Cohort là 990.000đ, chỉ nhận 3 người. Rẻ vì mình chưa có học viên nào, 3 người đầu trả ít hơn để cùng mình tạo ra kết quả đầu tiên. Đợt sau là 2.490.000đ, và chỉ mở khi đã có người đạt kết quả.
+> Founding Cohort là 990.000đ, chỉ nhận 3 người. Giá Founding chỉ dành cho 3 suất đầu, đổi lại bạn góp ý thẳng để mình làm chương trình tốt hơn qua từng tuần. Đợt sau là 2.490.000đ.
 
 **2. Mình học ngành khác, không biết code, theo được không?**
 > Được, ngành nào cũng được. AI làm phần code, bạn cần dùng được máy tính và AI chat ở mức cơ bản. Phần còn lại là hiểu khách, mà cái đó ngành bạn học có sẵn: học du lịch thì làm cho homestay, y dược làm cho phòng khám, kinh tế làm cho cửa hàng, spa.
@@ -49,8 +49,8 @@ Nút: Vào nhóm Digital Brain
 **7. Khác gì KP3 hay mấy khoá AI khác?**
 > Các chỗ khác dạy AI rộng hơn và cộng đồng lớn hơn, muốn khám phá nhiều mảng thì đó là lựa chọn tốt. Ở đây hẹp hơn: một dịch vụ, một tệp khách, một đầu ra là khách trả tiền đầu tiên. Chứng chỉ chứng minh bạn đã học, còn ở đây thứ chứng minh là hoá đơn đầu tiên.
 
-**8. Chưa có học viên thì sao mình tin được?**
-> Đúng là chưa có, nên giá Founding thấp và chỉ 3 suất. Tuấn Anh từng là lập trình viên bị layoff, tự đi tìm khách freelance từ con số 0, gửi 180 email mới có người trả lời. Giờ đang làm web và automation cho doanh nghiệp nhỏ. Bạn cũng chỉ thanh toán sau khi hai bên nói chuyện và thấy hợp.
+**8. Sao mình tin được chương trình này?**
+> Bạn không cần tin trước. Tuấn Anh từng là lập trình viên bị layoff, tự đi tìm khách freelance từ con số 0, gửi 180 email mới có người trả lời, và giờ đang làm web, automation cho doanh nghiệp nhỏ. Bạn chỉ thanh toán sau khi hai bên nói chuyện và thấy hợp, còn điều kiện hoàn 50% thì gắn với kết quả của chính bạn.
 
 **9. Cần chuẩn bị gì?**
 > Laptop, 2 giờ mỗi ngày, một tài khoản AI (bản miễn phí làm được phần lớn nhiệm vụ). Domain và hosting cho bản demo có thể tốn một khoản nhỏ.

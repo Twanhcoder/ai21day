@@ -15,7 +15,7 @@
 
   const QUESTIONS = [
     { id: 'price', label: 'Học phí bao nhiêu?', keys: ['gia', 'hoc phi', 'bao nhieu tien', 'chi phi', '990', 'tien', 're', 'dat qua', 'mac qua'],
-      text: 'Founding Cohort là 990.000đ, chỉ nhận 3 người. Rẻ vì mình chưa có học viên nào, 3 người đầu trả ít hơn để cùng mình tạo ra kết quả đầu tiên. Đợt sau là 2.490.000đ, và chỉ mở khi đã có người đạt kết quả.' },
+      text: 'Founding Cohort là 990.000đ, chỉ nhận 3 người. Giá Founding chỉ dành cho 3 suất đầu, đổi lại bạn góp ý thẳng để mình làm chương trình tốt hơn qua từng tuần. Đợt sau là 2.490.000đ.' },
     { id: 'fit', label: 'Học ngành khác, không biết code có theo được không?', keys: ['code', 'nganh', 'it', 'lap trinh', 'ky thuat', 'kinh te', 'du lich', 'y duoc', 'ngon ngu', 'su pham', 'marketing', 'khong biet', 'phu hop', 'hop khong', 'theo duoc'],
       text: 'Được, ngành nào cũng được. AI làm phần code, bạn cần dùng được máy tính và AI chat ở mức cơ bản. Phần còn lại là hiểu khách, mà cái đó ngành bạn học có sẵn: học du lịch thì làm cho homestay, y dược làm cho phòng khám, kinh tế làm cho cửa hàng, spa.' },
     { id: 'time', label: 'Mỗi ngày mất bao lâu, học thế nào?', keys: ['bao lau', 'thoi gian', 'may gio', 'moi ngay', 'lich', 'khi nao', 'bat dau', 'khai giang', 'online', 'truc tuyen', 'offline', 'hoc the nao'],
@@ -28,8 +28,8 @@
       text: 'Hoàn 495.000đ nếu bạn nộp đủ 21 nhiệm vụ đúng hạn và có 1 khách trả tiền trong 45 ngày. Hoàn trong 7 ngày sau khi xác nhận. Đổi lại bạn đồng ý cho mình chia sẻ câu chuyện của bạn, và bạn được xem trước.' },
     { id: 'compare', label: 'Khác gì KP3 hay mấy khoá AI khác?', keys: ['kp3', 'khac gi', 'so sanh', 'khoa khac', 'agents', 'hoc vien ai', 'hoi dan it', 'chung chi'],
       text: 'Các chỗ khác dạy AI rộng hơn và cộng đồng lớn hơn, muốn khám phá nhiều mảng thì đó là lựa chọn tốt. Ở đây hẹp hơn: một dịch vụ, một tệp khách, một đầu ra là khách trả tiền đầu tiên. Chứng chỉ chứng minh bạn đã học, còn ở đây thứ chứng minh là hoá đơn đầu tiên.' },
-    { id: 'trust', label: 'Chưa có học viên thì sao mình tin được?', keys: ['tin', 'lua dao', 'uy tin', 'hoc vien', 'chung minh', 'chua co', 'ai day', 'tuan anh'],
-      text: 'Đúng là chưa có, nên giá Founding thấp và chỉ 3 suất. Tuấn Anh từng là lập trình viên bị layoff, tự đi tìm khách freelance từ con số 0, gửi 180 email mới có người trả lời. Giờ đang làm web và automation cho doanh nghiệp nhỏ. Bạn cũng chỉ thanh toán sau khi hai bên nói chuyện và thấy hợp.' },
+    { id: 'trust', label: 'Sao mình tin được chương trình này?', keys: ['tin', 'lua dao', 'uy tin', 'hoc vien', 'co ai hoc', 'chung minh', 'dam bao', 'ai day', 'tuan anh', 'nguoi day'],
+      text: 'Bạn không cần tin trước. Tuấn Anh từng là lập trình viên bị layoff, tự đi tìm khách freelance từ con số 0, gửi 180 email mới có người trả lời, và giờ đang làm web, automation cho doanh nghiệp nhỏ. Bạn chỉ thanh toán sau khi hai bên nói chuyện và thấy hợp, còn điều kiện hoàn 50% thì gắn với kết quả của chính bạn.' },
     { id: 'prep', label: 'Cần chuẩn bị gì?', keys: ['chuan bi', 'can gi', 'laptop', 'may tinh', 'tai khoan', 'domain', 'hosting'],
       text: 'Laptop, 2 giờ mỗi ngày, một tài khoản AI (bản miễn phí làm được phần lớn nhiệm vụ). Domain và hosting cho bản demo có thể tốn một khoản nhỏ.' },
     { id: 'pay', label: 'Thanh toán, đặt cọc thế nào?', keys: ['thanh toan', 'coc', 'chuyen khoan', 'dang ky', 'tra gop'],
