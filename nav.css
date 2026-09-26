@@ -42,6 +42,7 @@
 }
 .logo-pill:hover { transform: scale(1.02); background: rgba(255, 255, 255, .22); }
 .logo-pill:active { transform: scale(.98); }
+.brand-mascot { width: 28px; height: 28px; flex: none; object-fit: contain; }
 .logo-svg { width: 18px; height: 18px; flex: none; color: #f7f4f8; }
 
 .menu-pill {
@@ -113,6 +114,7 @@
   .nav-left { flex: 1; gap: 6px; }
   .pill { height: 36px; border-radius: 10px; }
   .logo-pill { padding: 0 12px; font-size: 13px; gap: 8px; }
+  .brand-mascot { width: 24px; height: 24px; }
   .logo-svg { width: 15px; height: 15px; }
   .menu-open .logo-pill { width: 0; padding: 0; opacity: 0; }
   .menu-pill { width: 36px; }
