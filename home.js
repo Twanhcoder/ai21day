@@ -46,7 +46,11 @@
     let lastX = null;
 
     video.pause();
-    video.currentTime = 0;
+    // A paused video keeps its poster until the first seek; seek once the
+    // first frame is decoded so the real video frame replaces the poster
+    const showFirstFrame = () => { video.currentTime = 0.001; };
+    if (video.readyState >= 2) showFirstFrame();
+    else video.addEventListener('loadeddata', showFirstFrame, { once: true });
 
     // Chain seeks through `seeked` so rapid mouse moves never drop frames
     const seek = () => {
