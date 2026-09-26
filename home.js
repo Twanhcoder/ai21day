@@ -72,9 +72,14 @@
 
   // ---------- Cinematic 3D text driven by scroll + spring ----------
   const initCinematic = () => {
-    const section = document.getElementById('cau-chuyen');
+    const section = document.querySelector('[data-cinematic-section]');
     const text = document.getElementById('cinematicText');
-    if (!section || !text || reducedMotion) return;
+    if (!section || !text) return;
+    if (reducedMotion) {
+      text.style.transform = 'none';
+      text.style.opacity = '1';
+      return;
+    }
 
     // Mirrors framer-motion useSpring({ stiffness: 15, damping: 32, mass: 1.8 })
     const K = 15, C = 32, M = 1.8;
@@ -123,14 +128,23 @@
 
   // ---------- Pause background videos while off-screen ----------
   const initVideoVisibility = () => {
+    const videos = document.querySelectorAll('video[autoplay]');
+    const saveData = navigator.connection && navigator.connection.saveData;
+    if (reducedMotion || saveData) {
+      videos.forEach((video) => video.pause());
+      return;
+    }
     if (!('IntersectionObserver' in window)) return;
     const io = new IntersectionObserver((entries) => {
       entries.forEach(({ target, isIntersecting }) => {
-        if (isIntersecting) target.play().catch(() => {});
+        if (isIntersecting && !document.hidden) target.play().catch(() => {});
         else target.pause();
       });
     });
-    document.querySelectorAll('video[autoplay]').forEach((v) => io.observe(v));
+    videos.forEach((video) => io.observe(video));
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) videos.forEach((video) => video.pause());
+    });
   };
 
   document.addEventListener('DOMContentLoaded', () => {

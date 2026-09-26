@@ -418,7 +418,7 @@ main { padding-top: var(--header-h); }
 
 .course-guide-portrait { position: relative; margin: 0; overflow: hidden; border-radius: var(--surface-radius); }
 .course-guide-portrait::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 58%, rgba(73, 16, 48, 0.46)); pointer-events: none; }
-.course-guide-portrait img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; filter: saturate(0.72) contrast(1.08); }
+.course-guide-portrait img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; }
 .course-guide-copy > p:first-child { margin: 0 0 18px; color: var(--ink-soft); font-weight: 700; }
 .course-guide-copy h2 { max-width: 11ch; font-size: clamp(2.45rem, 4.5vw, 5rem); line-height: 1; }
 .course-guide-quote { max-width: 24ch; margin: 36px 0 0; color: var(--pink); font-size: clamp(1.28rem, 2vw, 2rem); line-height: 1.3; }
@@ -682,3 +682,8 @@ html:has(.application-dialog[open]) { overflow: hidden; }
 @media (prefers-reduced-transparency: reduce) {
   .button-ghost, .course-roadmap-track li, .mobile-cta { backdrop-filter: none; background: var(--surface); }
 }
+
+/* Founding price: future list price shown as anchor, refund incentive below */
+.course-price-panel > .course-price-anchor { margin: 12px 0 0; font-size: 0.8rem; }
+.course-price-anchor s { color: var(--ink-soft); text-decoration-color: var(--pink); }
+.course-price-panel > .course-price-refund { margin-top: 18px; padding: 14px 16px; border: 1px solid var(--line); border-left: 3px solid var(--pink); border-radius: 10px; color: var(--ink); font-size: 0.84rem; line-height: 1.5; }
