@@ -201,7 +201,9 @@ main { padding-top: var(--header-h); }
 .course-cinematic {
   display: grid;
   place-items: center;
+  background: var(--canvas);
 }
+.course-cinematic .course-watermark { top: 50%; }
 
 .course-cinematic .course-bg-video { z-index: -3; }
 
@@ -687,3 +689,9 @@ html:has(.application-dialog[open]) { overflow: hidden; }
 .course-price-panel > .course-price-anchor { margin: 12px 0 0; font-size: 0.8rem; }
 .course-price-anchor s { color: var(--ink-soft); text-decoration-color: var(--pink); }
 .course-price-panel > .course-price-refund { margin-top: 18px; padding: 14px 16px; border: 1px solid var(--line); border-left: 3px solid var(--pink); border-radius: 10px; color: var(--ink); font-size: 0.84rem; line-height: 1.5; }
+
+/* Hero line 1 ("Bạn biết dùng AI rồi.") stays on one line: size scales so 21 mono chars fit the viewport */
+@media (min-width: 901px) {
+  .course-hero h1 { max-width: none; font-size: min(5.7rem, calc((100vw - 96px) / 13.2)); }
+  .course-hero h1 span:first-child { white-space: nowrap; }
+}

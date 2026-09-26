@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (canUseDialog) {
       link.href = liveFormUrl;
-      link.textContent = 'Mở form đăng ký 3 phút';
+      link.textContent = 'Đăng ký phỏng vấn 3 phút';
       link.addEventListener('click', (event) => {
         if (event.metaKey || event.ctrlKey || event.shiftKey) return;
         event.preventDefault();
@@ -236,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
       link.href = liveFormUrl;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
-      link.textContent = 'Mở form đăng ký 3 phút';
+      link.textContent = 'Đăng ký phỏng vấn 3 phút';
       return;
     }
 

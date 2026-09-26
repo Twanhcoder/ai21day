@@ -128,23 +128,47 @@
 
   // ---------- Pause background videos while off-screen ----------
   const initVideoVisibility = () => {
-    const videos = document.querySelectorAll('video[autoplay]');
+    const videos = [...document.querySelectorAll('video[autoplay]')];
     const saveData = navigator.connection && navigator.connection.saveData;
-    if (reducedMotion || saveData) {
+    if (saveData) {
       videos.forEach((video) => video.pause());
       return;
     }
-    if (!('IntersectionObserver' in window)) return;
+
+    const visibleVideos = new Set();
+    const playVideo = (video) => {
+      if (document.hidden) return;
+      video.play().catch(() => {});
+    };
+
+    if (!('IntersectionObserver' in window)) {
+      videos.forEach(playVideo);
+      return;
+    }
+
     const io = new IntersectionObserver((entries) => {
       entries.forEach(({ target, isIntersecting }) => {
-        if (isIntersecting && !document.hidden) target.play().catch(() => {});
-        else target.pause();
+        if (isIntersecting) {
+          visibleVideos.add(target);
+          playVideo(target);
+        } else {
+          visibleVideos.delete(target);
+          target.pause();
+        }
       });
-    });
+    }, { threshold: 0.05 });
     videos.forEach((video) => io.observe(video));
+
     document.addEventListener('visibilitychange', () => {
-      if (document.hidden) videos.forEach((video) => video.pause());
+      if (document.hidden) {
+        videos.forEach((video) => video.pause());
+      } else {
+        visibleVideos.forEach(playVideo);
+      }
     });
+
+    window.addEventListener('pageshow', () => visibleVideos.forEach(playVideo));
+    document.addEventListener('pointerdown', () => visibleVideos.forEach(playVideo), { passive: true });
   };
 
   document.addEventListener('DOMContentLoaded', () => {

@@ -1,0 +1,41 @@
+/* Shared scroll effects for / and /course/ (driven by scroll-fx.js). */
+
+/* Reading progress bar */
+.fx-progress {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 60;
+  height: 2px;
+  background: linear-gradient(90deg, #8e7f94, #e86ba0);
+  transform: scaleX(0); transform-origin: 0 50%;
+  pointer-events: none;
+}
+
+/* Staggered reveal: fade, lift and un-blur */
+.fx-ready .fx-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  filter: blur(6px);
+  transition:
+    opacity .9s cubic-bezier(.215, .61, .355, 1) var(--fx-d, 0ms),
+    transform .9s cubic-bezier(.215, .61, .355, 1) var(--fx-d, 0ms),
+    filter .9s ease var(--fx-d, 0ms);
+}
+.fx-ready .fx-reveal.fx-in { opacity: 1; transform: none; filter: none; }
+
+/* Headings appear word by word */
+.fx-word { display: inline-block; white-space: pre; }
+.fx-ready .fx-words .fx-word {
+  opacity: 0;
+  transform: translateY(.45em) rotate(2deg);
+  transition: opacity .7s ease calc(var(--fx-i) * 45ms), transform .8s cubic-bezier(.215, .61, .355, 1) calc(var(--fx-i) * 45ms);
+}
+.fx-ready .fx-words.fx-in .fx-word { opacity: 1; transform: none; }
+
+/* Parallax media: slight overscale so the drift never shows edges */
+.fx-parallax { will-change: transform; transform: translate3d(0, var(--fx-y, 0px), 0) scale(1.12); }
+.fx-clip { overflow: clip; }
+
+/* Reduced motion: keep gentle opacity fades, drop movement and blur */
+@media (prefers-reduced-motion: reduce) {
+  .fx-ready .fx-reveal, .fx-ready .fx-words .fx-word { transform: none; filter: none; transition: opacity .8s ease var(--fx-d, 0ms); }
+  .fx-parallax { transform: none; }
+}
