@@ -696,3 +696,12 @@ html:has(.application-dialog[open]) { overflow: hidden; }
   .course-hero h1 { max-width: none; font-size: min(5.7rem, calc((100vw - 96px) / 13.2)); }
   .course-hero h1 span:first-child { white-space: nowrap; }
 }
+
+/* Tóm tắt nhanh trong cột FAQ: bảng thông tin ngắn cho người đọc lướt và máy đọc */
+.course-summary { margin: 34px 0 0; border-top: 1px solid var(--line); font-size: 0.8rem; }
+.course-summary div { display: grid; grid-template-columns: 8.5em 1fr; gap: 14px; padding: 11px 0; border-bottom: 1px solid var(--line); }
+.course-summary dt { color: var(--ink-soft); }
+.course-summary dd { margin: 0; color: var(--ink); line-height: 1.5; }
+@media (max-width: 680px) {
+  .course-summary div { grid-template-columns: 1fr; gap: 2px; }
+}

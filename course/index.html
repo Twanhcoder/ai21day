@@ -28,17 +28,170 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Course",
-    "name": "21AISYSTEM - Dùng AI để có khách freelance đầu tiên",
-    "description": "Thử thách 21 ngày cho người muốn có khách freelance đầu tiên: dùng AI làm landing page cho doanh nghiệp nhỏ và có khách trả tiền đầu tiên.",
-    "url": "https://www.tuananhvu.com/course/",
-    "image": "https://www.tuananhvu.com/assets/og-image.png",
-    "inLanguage": "vi-VN",
-    "provider": {
-      "@type": "Person",
-      "name": "Vũ Tuấn Anh",
-      "url": "https://www.tuananhvu.com/"
-    }
+    "@graph": [
+      {
+        "@type": "Course",
+        "@id": "https://www.tuananhvu.com/course/#course",
+        "name": "21AISYSTEM - Dùng AI để có khách freelance đầu tiên",
+        "description": "Thử thách thực hành 21 ngày cho sinh viên sắp và mới ra trường, ngành nào cũng được: dùng AI làm landing page, hệ thống nhận khách cho doanh nghiệp nhỏ và có khách trả tiền đầu tiên.",
+        "url": "https://www.tuananhvu.com/course/",
+        "image": "https://www.tuananhvu.com/assets/og-image.png",
+        "inLanguage": "vi-VN",
+        "provider": {
+          "@id": "https://www.tuananhvu.com/#person"
+        },
+        "educationalLevel": "Beginner",
+        "audience": {
+          "@type": "EducationalAudience",
+          "educationalRole": "student",
+          "audienceType": "Sinh viên sắp và mới ra trường"
+        },
+        "teaches": [
+          "Đóng gói dịch vụ landing page và form nhận khách",
+          "Dùng AI làm landing page mẫu cho một ngành",
+          "Tìm và nhắn chào hàng doanh nghiệp nhỏ",
+          "Báo giá và giao việc cho khách đầu tiên"
+        ],
+        "offers": {
+          "@type": "Offer",
+          "category": "Paid",
+          "price": "990000",
+          "priceCurrency": "VND",
+          "availability": "https://schema.org/LimitedAvailability",
+          "url": "https://www.tuananhvu.com/course/#dang-ky"
+        },
+        "hasCourseInstance": {
+          "@type": "CourseInstance",
+          "name": "Founding Cohort tháng 10/2026",
+          "courseMode": "online",
+          "startDate": "2026-10-12",
+          "endDate": "2026-11-01",
+          "instructor": {
+            "@id": "https://www.tuananhvu.com/#person"
+          },
+          "courseSchedule": {
+            "@type": "Schedule",
+            "repeatFrequency": "P1D",
+            "duration": "PT2H",
+            "startDate": "2026-10-12",
+            "endDate": "2026-11-01"
+          }
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.tuananhvu.com/#person",
+        "name": "Vũ Tuấn Anh",
+        "url": "https://www.tuananhvu.com/",
+        "image": "https://www.tuananhvu.com/assets/vu-tuan-anh.webp",
+        "jobTitle": "Web và AI automation cho doanh nghiệp nhỏ",
+        "knowsAbout": [
+          "Landing page",
+          "AI automation",
+          "Lead generation",
+          "Website cho doanh nghiệp nhỏ",
+          "Freelance"
+        ],
+        "sameAs": [
+          "https://www.facebook.com/tuananhvuai",
+          "https://www.threads.com/@tuananhvu.ai"
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "@id": "https://www.tuananhvu.com/course/#faq",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Đây là khoá học AI hay khoá kiếm tiền?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Đây là thử thách thực hành 21 ngày, không phải khoá học AI và cũng không hứa thu nhập. Bạn dùng AI làm một dịch vụ cụ thể là landing page và form nhận khách, rồi bán cho doanh nghiệp thật. Kết quả được đo bằng một con số: 1 khách trả tiền đầu tiên."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Không biết code, học ngành khác có theo được không?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Được, ngành nào cũng theo được. AI làm phần code, bạn cần dùng được máy tính và biết chat với AI ở mức cơ bản. Ngành bạn học là ngách khách đầu tiên của bạn: du lịch làm cho homestay, y dược làm cho phòng khám, kinh tế làm cho cửa hàng, spa."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "\"Khách trả tiền đầu tiên\" được tính thế nào?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Là một doanh nghiệp hoặc cá nhân trả tiền cho dịch vụ bạn làm bằng AI, bất kể số tiền, trong vòng 45 ngày kể từ 12/10/2026. Phải có chuyển khoản hoặc xác nhận của khách."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Học xong kiếm được bao nhiêu?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Chương trình không hứa thu nhập. Đích đến duy nhất được đo là 1 khách trả tiền đầu tiên trong 45 ngày, bao nhiêu cũng được. Giá dịch vụ bạn chào khách được trao đổi riêng trong quá trình học."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Nếu không có khách thì sao?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Không hoàn tiền trong trường hợp này, và điều đó được nói trước để bạn cân nhắc. Bạn vẫn giữ gói dịch vụ, portfolio, danh sách khách tiềm năng và quy trình làm với AI để đi tiếp."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Mình ngại nhắn tin chào hàng thì sao?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Bạn sẽ có danh sách doanh nghiệp và mẫu tin nhắn soạn sẵn, không phải tự nghĩ từ đầu. Nhưng chương trình yêu cầu nhắn ít nhất 30 doanh nghiệp thật trong 21 ngày. Không nhắn thì không có khách."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Mình sẽ bán dịch vụ gì cho khách?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Một gói cụ thể: landing page và form nhận khách cho doanh nghiệp nhỏ, có giá rõ ràng. Bạn dựng 1-2 mẫu thật cho ngách của mình làm portfolio, rồi mang mẫu đó đi chào khách."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Bị kẹt giữa chừng thì ai hỗ trợ?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Cả lớp sinh hoạt trong một nhóm Zalo riêng, bị kẹt thì hỏi ngay trong nhóm. Mỗi nhiệm vụ có tiêu chí hoàn thành và SOP làm với AI. Có thêm 4 buổi review nhóm vào 12/10, 18/10, 25/10 và 01/11 để xem bài thật của bạn."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Cần chuẩn bị gì?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Laptop, 2 giờ mỗi ngày và một tài khoản AI (bản miễn phí dùng được cho phần lớn nhiệm vụ). Domain và hosting cho bản demo có thể phát sinh chi phí nhỏ."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Khác gì các thử thách 21 ngày khác?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Các chương trình khác thường dạy AI rộng nhiều mảng. Ở đây chỉ có một dịch vụ, một tệp khách và một đầu ra: khách trả tiền đầu tiên."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "Sau 21 ngày mình còn gì?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Bạn giữ lại 5 thứ: gói dịch vụ có giá, portfolio 1-2 mẫu thật, danh sách khách tiềm năng, bộ tin nhắn và báo giá, quy trình làm với AI để làm lại lần sau. Chặng cuối có kế hoạch 45 ngày tiếp theo."
+            }
+          }
+        ]
+      }
+    ]
   }
   </script>
   <link rel="preload" as="image" href="/assets/course-hero-cinematic-v1.webp" type="image/webp">
@@ -48,7 +201,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton+SC&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&amp;display=swap">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="/course.css?v=20260926-4">
+  <link rel="stylesheet" href="/course.css?v=20260927-1">
   <link rel="stylesheet" href="/nav.css">
   <link rel="stylesheet" href="/scroll-fx.css">
   <link rel="stylesheet" href="/chat.css?v=20260926-1">
@@ -319,14 +472,27 @@
         <header class="course-faq-head reveal">
           <h2>Rõ trước khi bắt đầu.</h2>
           <p>Kết quả, thời gian, thanh toán và hỗ trợ đều được nói trước.</p>
+          <dl class="course-summary" aria-label="21AISYSTEM tóm tắt nhanh">
+            <div><dt>Là gì</dt><dd>Thử thách thực hành 21 ngày: dùng AI làm landing page, hệ thống nhận khách cho doanh nghiệp nhỏ và có khách trả tiền đầu tiên</dd></div>
+            <div><dt>Dành cho</dt><dd>Sinh viên sắp và mới ra trường, ngành nào cũng được</dd></div>
+            <div><dt>Đầu ra</dt><dd>1 khách trả tiền trong 45 ngày kể từ 12/10/2026</dd></div>
+            <div><dt>Học phí</dt><dd>990.000đ, Founding 3 suất. Đợt sau 2.490.000đ</dd></div>
+            <div><dt>Lịch</dt><dd>12/10 đến 01/11/2026, 2 giờ mỗi ngày, trực tuyến</dd></div>
+            <div><dt>Hoàn tiền</dt><dd>50% khi nộp đủ 21 nhiệm vụ đúng hạn và có 1 khách trả tiền trong 45 ngày</dd></div>
+          </dl>
         </header>
         <div class="faq-list reveal">
-          <details open><summary>Đây là khoá học AI hay khoá kiếm tiền?</summary><p>Không hẳn là cả hai. Đây là thử thách thực hành có hướng dẫn: bạn dùng AI để làm một dịch vụ cụ thể và bán nó cho khách thật. Mình không hứa thu nhập, mình hứa nói rõ cách đo kết quả.</p></details>
-          <details><summary>"Khách trả tiền đầu tiên" được tính thế nào?</summary><p>Một doanh nghiệp hoặc cá nhân trả tiền cho dịch vụ bạn làm bằng AI, bất kể số tiền, trong vòng 45 ngày kể từ 12/10/2026. Có chuyển khoản hoặc xác nhận của khách.</p></details>
-          <details><summary>Nếu không có khách thì sao?</summary><p>Bạn vẫn giữ gói dịch vụ, portfolio, danh sách khách tiềm năng và quy trình. Mình không hoàn tiền trong trường hợp này, và nói trước để bạn cân nhắc.</p></details>
-          <details><summary>Mình chưa giỏi code có theo được không?</summary><p>Được, ngành nào cũng được. AI làm phần code, bạn cần dùng được máy tính và AI chat ở mức cơ bản. Phần còn lại là hiểu khách trong ngành bạn học.</p></details>
-          <details><summary>Cần chuẩn bị gì?</summary><p>Laptop, 2 giờ mỗi ngày, tài khoản AI (bản miễn phí dùng được cho phần lớn nhiệm vụ). Domain và hosting cho bản demo có thể phát sinh chi phí nhỏ.</p></details>
+          <details open><summary>Đây là khoá học AI hay khoá kiếm tiền?</summary><p>Đây là thử thách thực hành 21 ngày, không phải khoá học AI và cũng không hứa thu nhập. Bạn dùng AI làm một dịch vụ cụ thể là landing page và form nhận khách, rồi bán cho doanh nghiệp thật. Kết quả được đo bằng một con số: 1 khách trả tiền đầu tiên.</p></details>
+          <details><summary>Không biết code, học ngành khác có theo được không?</summary><p>Được, ngành nào cũng theo được. AI làm phần code, bạn cần dùng được máy tính và biết chat với AI ở mức cơ bản. Ngành bạn học là ngách khách đầu tiên của bạn: du lịch làm cho homestay, y dược làm cho phòng khám, kinh tế làm cho cửa hàng, spa.</p></details>
+          <details><summary>"Khách trả tiền đầu tiên" được tính thế nào?</summary><p>Là một doanh nghiệp hoặc cá nhân trả tiền cho dịch vụ bạn làm bằng AI, bất kể số tiền, trong vòng 45 ngày kể từ 12/10/2026. Phải có chuyển khoản hoặc xác nhận của khách.</p></details>
+          <details><summary>Học xong kiếm được bao nhiêu?</summary><p>Chương trình không hứa thu nhập. Đích đến duy nhất được đo là 1 khách trả tiền đầu tiên trong 45 ngày, bao nhiêu cũng được. Giá dịch vụ bạn chào khách được trao đổi riêng trong quá trình học.</p></details>
+          <details><summary>Nếu không có khách thì sao?</summary><p>Không hoàn tiền trong trường hợp này, và điều đó được nói trước để bạn cân nhắc. Bạn vẫn giữ gói dịch vụ, portfolio, danh sách khách tiềm năng và quy trình làm với AI để đi tiếp.</p></details>
+          <details><summary>Mình ngại nhắn tin chào hàng thì sao?</summary><p>Bạn sẽ có danh sách doanh nghiệp và mẫu tin nhắn soạn sẵn, không phải tự nghĩ từ đầu. Nhưng chương trình yêu cầu nhắn ít nhất 30 doanh nghiệp thật trong 21 ngày. Không nhắn thì không có khách.</p></details>
+          <details><summary>Mình sẽ bán dịch vụ gì cho khách?</summary><p>Một gói cụ thể: landing page và form nhận khách cho doanh nghiệp nhỏ, có giá rõ ràng. Bạn dựng 1-2 mẫu thật cho ngách của mình làm portfolio, rồi mang mẫu đó đi chào khách.</p></details>
+          <details><summary>Bị kẹt giữa chừng thì ai hỗ trợ?</summary><p>Cả lớp sinh hoạt trong một nhóm Zalo riêng, bị kẹt thì hỏi ngay trong nhóm. Mỗi nhiệm vụ có tiêu chí hoàn thành và SOP làm với AI. Có thêm 4 buổi review nhóm vào 12/10, 18/10, 25/10 và 01/11 để xem bài thật của bạn.</p></details>
+          <details><summary>Cần chuẩn bị gì?</summary><p>Laptop, 2 giờ mỗi ngày và một tài khoản AI (bản miễn phí dùng được cho phần lớn nhiệm vụ). Domain và hosting cho bản demo có thể phát sinh chi phí nhỏ.</p></details>
           <details><summary>Khác gì các thử thách 21 ngày khác?</summary><p>Các chương trình khác thường dạy AI rộng nhiều mảng. Ở đây chỉ có một dịch vụ, một tệp khách và một đầu ra: khách trả tiền đầu tiên.</p></details>
+          <details><summary>Sau 21 ngày mình còn gì?</summary><p>Bạn giữ lại 5 thứ: gói dịch vụ có giá, portfolio 1-2 mẫu thật, danh sách khách tiềm năng, bộ tin nhắn và báo giá, quy trình làm với AI để làm lại lần sau. Chặng cuối có kế hoạch 45 ngày tiếp theo.</p></details>
           <details class="policy-details"><summary>Điều kiện Founding Cohort</summary>
             <div>
               <p><strong>Hồ sơ và dữ liệu:</strong> Thông tin trong Google Form chỉ được dùng để đánh giá mức phù hợp và liên hệ. Bạn có thể yêu cầu chỉnh sửa hoặc xóa hồ sơ qua Zalo 0868 532 538. Không gửi dữ liệu khách hàng nhạy cảm trong form.</p>

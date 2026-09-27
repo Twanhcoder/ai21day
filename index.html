@@ -24,11 +24,37 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "Person",
-    "name": "Vũ Tuấn Anh",
-    "url": "https://www.tuananhvu.com/",
-    "image": "https://www.tuananhvu.com/assets/vu-tuan-anh.webp",
-    "knowsAbout": ["AI", "Marketing", "Website", "Lead generation", "System"]
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://www.tuananhvu.com/#website",
+        "name": "Vũ Tuấn Anh",
+        "url": "https://www.tuananhvu.com/",
+        "inLanguage": "vi-VN",
+        "publisher": {
+          "@id": "https://www.tuananhvu.com/#person"
+        }
+      },
+      {
+        "@type": "Person",
+        "@id": "https://www.tuananhvu.com/#person",
+        "name": "Vũ Tuấn Anh",
+        "url": "https://www.tuananhvu.com/",
+        "image": "https://www.tuananhvu.com/assets/vu-tuan-anh.webp",
+        "jobTitle": "Web và AI automation cho doanh nghiệp nhỏ",
+        "knowsAbout": [
+          "Landing page",
+          "AI automation",
+          "Lead generation",
+          "Website cho doanh nghiệp nhỏ",
+          "Freelance"
+        ],
+        "sameAs": [
+          "https://www.facebook.com/tuananhvuai",
+          "https://www.threads.com/@tuananhvu.ai"
+        ]
+      }
+    ]
   }
   </script>
   <link rel="icon" href="/assets/favicon.png?v=20260926" sizes="128x128" type="image/png">
