@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin | 21AISYSTEM</title>
+  <link rel="icon" href="/assets/favicon.png?v=20260926" sizes="128x128" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap">
+  <link rel="stylesheet" href="/course.css?v=20260927-1">
+  <link rel="stylesheet" href="/forms.css?v=20260927-1">
+  <style>
+    .adm { width: min(1200px, 100%); margin: 0 auto; padding: 32px 16px 64px; display: grid; gap: 20px; }
+    .adm h1 { margin: 0; font-size: 1.4rem; }
+    .adm-top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; }
+    .adm-tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+    .adm-tab { padding: 10px 16px; border: 1px solid var(--line); border-radius: var(--control-radius); background: transparent; color: var(--ink-soft); font: inherit; font-size: 0.84rem; cursor: pointer; }
+    .adm-tab[aria-selected="true"] { background: var(--ink); color: var(--canvas); border-color: var(--ink); }
+    .adm-tab span { opacity: 0.6; }
+    .adm-bar { display: flex; flex-wrap: wrap; gap: 10px; justify-content: space-between; align-items: center; }
+    .adm-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--surface-radius); background: var(--surface); }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    th, td { padding: 12px 14px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; white-space: nowrap; }
+    td.wrap { white-space: normal; min-width: 180px; }
+    th { color: var(--ink-soft); font-weight: 400; position: sticky; top: 0; background: var(--surface-2); }
+    tr:last-child td { border-bottom: 0; }
+    .num { text-align: right; font-variant-numeric: tabular-nums; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 0.7rem; border: 1px solid var(--line); }
+    .badge-success { background: #1f5f3c; color: #8fe3b0; border-color: transparent; }
+    .badge-pending { background: #5f4a1f; color: #f3d38a; border-color: transparent; }
+    .badge-cancelled { background: #3a2a2e; color: #c9a3ab; border-color: transparent; }
+    .acts { display: flex; gap: 6px; }
+    .act { padding: 5px 10px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--ink); font: inherit; font-size: 0.72rem; cursor: pointer; }
+    .act-danger { color: #ff9a9a; }
+    .act-ok { color: #8fe3b0; }
+    .adm-empty { padding: 32px; text-align: center; color: var(--ink-soft); }
+    .adm-login { width: min(400px, calc(100% - 32px)); margin: 12vh auto 0; padding: 28px; border: 1px solid var(--line); border-radius: var(--surface-radius); background: var(--surface); }
+    .adm-dialog { width: min(560px, calc(100% - 32px)); padding: 0; border: 1px solid var(--line); border-radius: var(--surface-radius); background: var(--surface); color: var(--ink); }
+    .adm-dialog::backdrop { background: rgba(5, 4, 7, 0.78); }
+    .adm-dialog .f-form { padding: 22px; }
+    .adm-dialog #editor-fields { padding: 0; }
+    .adm-dialog h2 { margin: 0; font-size: 1.1rem; }
+    .adm-dialog-acts { display: flex; gap: 10px; justify-content: flex-end; }
+    .adm-toast { position: fixed; right: 16px; bottom: 16px; padding: 12px 16px; border-radius: var(--control-radius); background: var(--surface-2); border: 1px solid var(--line); font-size: 0.82rem; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <form class="adm-login f-form" id="login" hidden>
+    <h1>Admin 21AISYSTEM</h1>
+    <label class="f-field"><span>Mật khẩu</span><input class="f-input" type="password" name="key" autocomplete="current-password" required></label>
+    <button class="button button-primary button-block" type="submit">Vào trang quản trị</button>
+    <p class="f-status" data-kind="error" id="login-err" role="alert"></p>
+  </form>
+
+  <main class="adm" id="app" hidden>
+    <div class="adm-top">
+      <h1>Quản lý bán hàng</h1>
+      <div class="adm-tabs" role="tablist">
+        <button class="adm-tab" role="tab" data-tab="products">Sản phẩm <span data-count="products"></span></button>
+        <button class="adm-tab" role="tab" data-tab="customers">Khách hàng <span data-count="customers"></span></button>
+        <button class="adm-tab" role="tab" data-tab="orders">Đơn hàng <span data-count="orders"></span></button>
+      </div>
+    </div>
+    <div class="adm-bar">
+      <button class="button button-primary button-small" type="button" id="add">+ Thêm mới</button>
+      <div class="acts"><button class="act" type="button" id="reload">Làm mới</button><button class="act" type="button" id="logout">Đăng xuất</button></div>
+    </div>
+    <div class="adm-wrap" id="table" role="tabpanel"></div>
+  </main>
+
+  <dialog class="adm-dialog" id="editor">
+    <form class="f-form" id="editor-form" novalidate>
+      <h2 id="editor-title"></h2>
+      <div id="editor-fields" class="f-form"></div>
+      <p class="f-status" data-kind="error" id="editor-err" role="alert"></p>
+      <div class="adm-dialog-acts">
+        <button class="act" type="button" id="editor-cancel">Hủy</button>
+        <button class="button button-primary button-small" type="submit">Lưu</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="adm-toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script>
+  (() => {
+    const $ = (id) => document.getElementById(id);
+    const esc = (v) => String(v ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    const vnd = (n) => Number(n || 0).toLocaleString('vi-VN') + 'đ';
+    const when = (d) => d ? new Date(d).toLocaleString('vi-VN', { dateStyle: 'short', timeStyle: 'short' }) : '';
+    const TYPE = { physical: 'Vật lý', digital: 'Số', service: 'Dịch vụ' };
+    const STATUS = { pending: 'Chờ thanh toán', success: 'Đã thanh toán', cancelled: 'Đã hủy' };
+
+    const session = {
+      get() { try { return sessionStorage.getItem('ai21-admin') || ''; } catch { return ''; } },
+      set(v) { try { v ? sessionStorage.setItem('ai21-admin', v) : sessionStorage.removeItem('ai21-admin'); } catch {} },
+    };
+    let key = session.get();
+    let tab = 'orders';
+    const data = { products: [], customers: [], orders: [] };
+    let editing = null;
+
+    const toast = (msg) => { const t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => { t.hidden = true; }, 2600); };
+
+    async function api(resource, { method = 'GET', id, body } = {}) {
+      const url = `/api/admin?resource=${resource}${id ? `&id=${id}` : ''}`;
+      const res = await fetch(url, { method, headers: { 'Content-Type': 'application/json', 'x-admin-key': key }, body: body ? JSON.stringify(body) : undefined });
+      if (res.status === 401) { logout('Sai mật khẩu hoặc phiên đã hết hạn'); throw new Error('Unauthorized'); }
+      if (res.status === 204) return null;
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(json.error || `Lỗi ${res.status}`);
+      return json;
+    }
+
+    const FIELDS = {
+      products: [
+        { name: 'name', label: 'Tên sản phẩm', required: true },
+        { name: 'slug', label: 'Slug (dùng trong link ?p=)', required: true },
+        { name: 'type', label: 'Loại', type: 'select', options: TYPE, required: true },
+        { name: 'price', label: 'Giá (VND)', type: 'number', required: true },
+        { name: 'stock', label: 'Tồn kho (chỉ hàng vật lý)', type: 'number' },
+        { name: 'description', label: 'Mô tả', type: 'textarea' },
+        { name: 'active', label: 'Đang bán', type: 'select', options: { true: 'Có', false: 'Không' } },
+      ],
+      customers: [
+        { name: 'name', label: 'Họ tên', required: true },
+        { name: 'phone', label: 'Số điện thoại', type: 'tel', required: true },
+        { name: 'zalo', label: 'Zalo' },
+        { name: 'email', label: 'Email', type: 'email' },
+        { name: 'major', label: 'Ngành học' },
+        { name: 'niche', label: 'Ngách muốn làm' },
+        { name: 'note', label: 'Ghi chú', type: 'textarea' },
+      ],
+      orders: () => [
+        { name: 'customer_id', label: 'Khách hàng', type: 'select', required: true, options: Object.fromEntries(data.customers.map((c) => [c.id, `${c.name} · ${c.phone}`])) },
+        { name: 'product_id', label: 'Sản phẩm', type: 'select', required: true, options: Object.fromEntries(data.products.map((p) => [p.id, `${p.name} · ${vnd(p.price)}${p.type === 'physical' ? ` · còn ${p.stock}` : ''}`])) },
+        { name: 'quantity', label: 'Số lượng', type: 'number', value: 1 },
+        { name: 'status', label: 'Trạng thái', type: 'select', options: { pending: STATUS.pending, success: 'Đã thanh toán (xác nhận tay)' } },
+      ],
+    };
+
+    const COLUMNS = {
+      products: [
+        ['Tên', (r) => `<td class="wrap">${esc(r.name)}<br><small style="opacity:.6">${esc(r.slug)}</small></td>`],
+        ['Loại', (r) => `<td>${TYPE[r.type]}</td>`],
+        ['Giá', (r) => `<td class="num">${vnd(r.price)}</td>`],
+        ['Tồn kho', (r) => `<td class="num">${r.type === 'physical' ? r.stock : '—'}</td>`],
+        ['Mô tả', (r) => `<td class="wrap">${esc(r.description)}</td>`],
+        ['Bán', (r) => `<td>${r.active ? 'Có' : 'Không'}</td>`],
+      ],
+      customers: [
+        ['Họ tên', (r) => `<td>${esc(r.name)}</td>`],
+        ['SĐT', (r) => `<td>${esc(r.phone)}</td>`],
+        ['Zalo', (r) => `<td>${esc(r.zalo)}</td>`],
+        ['Email', (r) => `<td>${esc(r.email)}</td>`],
+        ['Hồ sơ', (r) => `<td class="wrap">${[r.current_status, r.major, r.niche].filter(Boolean).map(esc).join(' · ')}</td>`],
+        ['Nguồn', (r) => `<td>${esc(r.source)}</td>`],
+        ['Ngày đăng ký', (r) => `<td>${when(r.created_at)}</td>`],
+      ],
+      orders: [
+        ['Mã', (r) => `<td><strong>${esc(r.code)}</strong></td>`],
+        ['Khách', (r) => `<td>${esc(r.customer?.name)}<br><small style="opacity:.6">${esc(r.customer?.phone)}</small></td>`],
+        ['Sản phẩm', (r) => `<td class="wrap">${esc(r.product?.name)} × ${r.quantity}</td>`],
+        ['Số tiền', (r) => `<td class="num">${vnd(r.amount)}</td>`],
+        ['Trạng thái', (r) => `<td><span class="badge badge-${r.status}">${STATUS[r.status]}</span>${r.paid_via ? `<br><small style="opacity:.6">${r.paid_via === 'sepay' ? 'Sepay tự động' : 'Xác nhận tay'}</small>` : ''}</td>`],
+        ['Ngày mua', (r) => `<td>${when(r.created_at)}</td>`],
+      ],
+    };
+
+    function render() {
+      document.querySelectorAll('[data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === tab)));
+      Object.keys(data).forEach((k) => { document.querySelector(`[data-count="${k}"]`).textContent = `(${data[k].length})`; });
+      const rows = data[tab];
+      if (!rows.length) { $('table').innerHTML = '<p class="adm-empty">Chưa có dữ liệu.</p>'; return; }
+      const cols = COLUMNS[tab];
+      $('table').innerHTML = `<table><thead><tr>${cols.map(([h]) => `<th>${h}</th>`).join('')}<th>Thao tác</th></tr></thead><tbody>${
+        rows.map((r) => `<tr>${cols.map(([, f]) => f(r)).join('')}<td><div class="acts">${actions(r)}</div></td></tr>`).join('')
+      }</tbody></table>`;
+    }
+
+    function actions(r) {
+      if (tab !== 'orders') return `<button class="act" data-edit="${r.id}">Sửa</button><button class="act act-danger" data-del="${r.id}">Xóa</button>`;
+      const out = [];
+      if (r.status === 'pending') out.push(`<button class="act act-ok" data-status="success" data-id="${r.id}">Đã nhận tiền</button>`);
+      if (r.status === 'success') out.push(`<button class="act" data-status="pending" data-id="${r.id}">Về chờ</button>`);
+      if (r.status !== 'cancelled') out.push(`<button class="act" data-status="cancelled" data-id="${r.id}">Hủy đơn</button>`);
+      out.push(`<button class="act act-danger" data-del="${r.id}">Xóa</button>`);
+      return out.join('');
+    }
+
+    async function load() {
+      const [p, c, o] = await Promise.all([api('products'), api('customers'), api('orders')]);
+      Object.assign(data, { products: p, customers: c, orders: o });
+      render();
+    }
+
+    function openEditor(row) {
+      editing = row;
+      const fields = typeof FIELDS[tab] === 'function' ? FIELDS[tab]() : FIELDS[tab];
+      $('editor-title').textContent = `${row ? 'Sửa' : 'Thêm'} ${{ products: 'sản phẩm', customers: 'khách hàng', orders: 'đơn hàng' }[tab]}`;
+      $('editor-fields').innerHTML = fields.map((f) => {
+        const v = row ? row[f.name] : (f.value ?? '');
+        const req = f.required ? ' required' : '';
+        const label = `<span>${f.label}${f.required ? ' <b>*</b>' : ''}</span>`;
+        let input;
+        if (f.type === 'select') input = `<select class="f-input" name="${f.name}"${req}>${f.required ? '<option value="">Chọn</option>' : ''}${Object.entries(f.options).map(([k, t]) => `<option value="${esc(k)}"${String(v) === k ? ' selected' : ''}>${esc(t)}</option>`).join('')}</select>`;
+        else if (f.type === 'textarea') input = `<textarea class="f-input" name="${f.name}">${esc(v)}</textarea>`;
+        else input = `<input class="f-input" name="${f.name}" type="${f.type || 'text'}" value="${esc(v)}"${req}${f.type === 'number' ? ' min="0"' : ''}>`;
+        return `<label class="f-field">${label}${input}</label>`;
+      }).join('');
+      $('editor-err').textContent = '';
+      $('editor').showModal();
+    }
+
+    $('editor-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const body = Object.fromEntries(new FormData(e.target));
+      const missing = [...e.target.querySelectorAll('[required]')].find((i) => !i.value.trim());
+      if (missing) { $('editor-err').textContent = 'Điền đủ các mục bắt buộc'; missing.focus(); return; }
+      try {
+        await api(tab, editing ? { method: 'PATCH', id: editing.id, body } : { method: 'POST', body });
+        $('editor').close();
+        toast('Đã lưu');
+        await load();
+      } catch (err) { $('editor-err').textContent = err.message; }
+    });
+    $('editor-cancel').addEventListener('click', () => $('editor').close());
+
+    $('table').addEventListener('click', async (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      try {
+        if (btn.dataset.edit) return openEditor(data[tab].find((r) => String(r.id) === btn.dataset.edit));
+        if (btn.dataset.del) {
+          if (!confirm('Xóa bản ghi này? Không hoàn tác được.')) return;
+          await api(tab, { method: 'DELETE', id: btn.dataset.del });
+          toast('Đã xóa');
+        }
+        if (btn.dataset.status) {
+          await api('orders', { method: 'PATCH', id: btn.dataset.id, body: { status: btn.dataset.status } });
+          toast(`Đã chuyển: ${STATUS[btn.dataset.status]}`);
+        }
+        await load();
+      } catch (err) { if (err.message !== 'Unauthorized') toast(err.message); }
+    });
+
+    document.querySelectorAll('[data-tab]').forEach((b) => b.addEventListener('click', () => { tab = b.dataset.tab; render(); }));
+    $('add').addEventListener('click', () => openEditor(null));
+    $('reload').addEventListener('click', () => load().then(() => toast('Đã cập nhật')).catch(() => {}));
+    $('logout').addEventListener('click', () => logout(''));
+
+    function logout(msg) {
+      key = '';
+      session.set('');
+      $('app').hidden = true;
+      $('login').hidden = false;
+      $('login-err').textContent = msg;
+    }
+
+    $('login').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      key = e.target.key.value;
+      try {
+        await load();
+        session.set(key);
+        $('login').hidden = true;
+        $('app').hidden = false;
+      } catch (err) { if (err.message !== 'Unauthorized') $('login-err').textContent = err.message; }
+    });
+
+    if (key) load().then(() => { $('app').hidden = false; }).catch(() => {});
+    else $('login').hidden = false;
+  })();
+  </script>
+</body>
+</html>

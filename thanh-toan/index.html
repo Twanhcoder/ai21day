@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050407">
+  <meta name="robots" content="noindex">
+  <title>Thanh toán | 21AISYSTEM</title>
+  <link rel="icon" href="/assets/favicon.png?v=20260926" sizes="128x128" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap">
+  <link rel="stylesheet" href="/course.css?v=20260927-1">
+  <link rel="stylesheet" href="/forms.css?v=20260927-1">
+  <style>
+    .pay { min-height: 100dvh; display: grid; place-items: start center; padding: 48px 16px 64px; }
+    .pay-card { width: min(560px, 100%); display: grid; gap: 22px; padding: clamp(20px, 5vw, 32px); border: 1px solid var(--line); border-radius: var(--surface-radius); background: var(--surface); }
+    .pay-card h1 { margin: 0; font-size: clamp(1.3rem, 4vw, 1.7rem); line-height: 1.2; }
+    .pay-back { color: var(--ink-soft); font-size: 0.8rem; text-decoration: none; }
+    .pay-total { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-block: 1px solid var(--line); }
+    .pay-total strong { font-size: 1.4rem; }
+    .pay-qr { display: grid; justify-items: center; gap: 10px; padding: 16px; border-radius: var(--control-radius); background: #fff; }
+    .pay-qr img { width: min(280px, 100%); aspect-ratio: 1; }
+    .pay-qr small { color: #333; font-size: 0.72rem; text-align: center; }
+    .pay-info { display: grid; gap: 10px; margin: 0; }
+    .pay-info div { display: flex; justify-content: space-between; gap: 12px; align-items: center; font-size: 0.86rem; }
+    .pay-info dt { color: var(--ink-soft); }
+    .pay-info dd { margin: 0; display: flex; gap: 8px; align-items: center; text-align: right; word-break: break-all; }
+    .pay-copy { padding: 4px 10px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--ink); font: inherit; font-size: 0.72rem; cursor: pointer; }
+    .pay-code { color: var(--pink); font-weight: 700; }
+    .pay-wait { display: flex; gap: 10px; align-items: center; font-size: 0.82rem; color: var(--ink-soft); }
+    .pay-dot { width: 10px; height: 10px; flex: none; border-radius: 50%; background: var(--pink); animation: pay-pulse 1.2s ease-in-out infinite; }
+    @keyframes pay-pulse { 50% { opacity: 0.25; } }
+    @media (prefers-reduced-motion: reduce) { .pay-dot { animation: none; } }
+    .pay-success { display: grid; gap: 14px; text-align: center; justify-items: center; }
+    .pay-success .pay-check { width: 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background: #1f5f3c; color: #8fe3b0; font-size: 2rem; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <main class="pay">
+    <div class="pay-card">
+      <a class="pay-back" href="/course/">&larr; 21AISYSTEM</a>
+
+      <section id="step-form">
+        <form class="f-form" id="checkout-form" novalidate>
+          <h1>Thanh toán</h1>
+          <label class="f-field"><span>Sản phẩm <b>*</b></span>
+            <select class="f-input" name="product" id="product" required><option value="">Đang tải...</option></select>
+            <p class="f-error"></p></label>
+          <label class="f-field"><span>Họ và tên <b>*</b></span><input class="f-input" name="name" autocomplete="name" required maxlength="100"><p class="f-error"></p></label>
+          <label class="f-field"><span>Số điện thoại (Zalo) <b>*</b></span><input class="f-input" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0912345678" required><p class="f-error"></p></label>
+          <label class="f-field"><span>Email <b>*</b></span><input class="f-input" name="email" type="email" autocomplete="email" placeholder="ban@gmail.com" required><p class="f-error"></p></label>
+          <div class="pay-total"><span>Tổng thanh toán</span><strong id="total">0đ</strong></div>
+          <button class="button button-primary button-block" type="submit">Tạo mã QR thanh toán</button>
+          <p class="f-status" id="form-status" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section id="step-qr" hidden>
+        <div class="f-form">
+          <h1>Quét QR để thanh toán</h1>
+          <div class="pay-qr"><img id="qr-img" alt="Mã QR chuyển khoản"><small>Mở app ngân hàng bất kỳ, chọn quét QR. Số tiền và nội dung đã điền sẵn.</small></div>
+          <dl class="pay-info">
+            <div><dt>Ngân hàng</dt><dd id="qr-bank"></dd></div>
+            <div><dt>Số tài khoản</dt><dd><span id="qr-acc"></span><button class="pay-copy" type="button" data-copy="qr-acc">Chép</button></dd></div>
+            <div><dt>Chủ tài khoản</dt><dd id="qr-name"></dd></div>
+            <div><dt>Số tiền</dt><dd><span id="qr-amount"></span></dd></div>
+            <div><dt>Nội dung CK</dt><dd><span class="pay-code" id="qr-code"></span><button class="pay-copy" type="button" data-copy="qr-code">Chép</button></dd></div>
+          </dl>
+          <p class="f-status">Nếu chuyển khoản thủ công, ghi <strong>đúng nội dung</strong> ở trên để hệ thống tự xác nhận.</p>
+          <div class="pay-wait" id="qr-wait" role="status" aria-live="polite"><span class="pay-dot"></span><span>Đang chờ thanh toán, trang sẽ tự cập nhật...</span></div>
+        </div>
+      </section>
+
+      <section id="step-done" hidden>
+        <div class="pay-success">
+          <div class="pay-check" aria-hidden="true">&#10003;</div>
+          <h1>Thanh toán thành công</h1>
+          <p>Cảm ơn bạn! Đơn <strong class="pay-code" id="done-code"></strong> đã được xác nhận. Tuấn Anh sẽ nhắn Zalo cho bạn trong hôm nay.</p>
+          <a class="button button-primary" href="https://zalo.me/0868532538" target="_blank" rel="noopener noreferrer">Nhắn Zalo ngay</a>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+  (() => {
+    const $ = (id) => document.getElementById(id);
+    const vnd = (n) => Number(n).toLocaleString('vi-VN') + 'đ';
+    const form = $('checkout-form');
+    const select = $('product');
+    const status = $('form-status');
+    const store = {
+      get() { try { return sessionStorage.getItem('ai21-order'); } catch { return null; } },
+      set(v) { try { v ? sessionStorage.setItem('ai21-order', v) : sessionStorage.removeItem('ai21-order'); } catch {} },
+    };
+    let products = [];
+    let pollTimer = null;
+
+    const phoneOk = (v) => /^(?:\+?84|0)[35789]\d{8}$/.test(v.replace(/[\s.\-()]/g, ''));
+    const emailOk = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+    const validate = (f) => {
+      const v = f.value.trim();
+      if (f.required && !v) return 'Mục này bắt buộc';
+      if (f.name === 'phone' && !phoneOk(v)) return 'SĐT chưa đúng, ví dụ 0912345678';
+      if (f.name === 'email' && !emailOk(v)) return 'Email chưa đúng định dạng';
+      return '';
+    };
+    const setError = (f, msg) => {
+      f.setAttribute('aria-invalid', msg ? 'true' : 'false');
+      f.closest('.f-field').querySelector('.f-error').textContent = msg;
+    };
+    form.querySelectorAll('.f-input').forEach((f) => f.addEventListener('blur', () => setError(f, validate(f))));
+
+    const updateTotal = () => {
+      const p = products.find((x) => x.slug === select.value);
+      $('total').textContent = vnd(p ? p.price : 0);
+    };
+    select.addEventListener('change', updateTotal);
+
+    const show = (step) => ['step-form', 'step-qr', 'step-done'].forEach((id) => { $(id).hidden = id !== step; });
+
+    const showDone = (code) => {
+      clearTimeout(pollTimer);
+      store.set(null);
+      $('done-code').textContent = code;
+      show('step-done');
+    };
+
+    const poll = (code, startedAt = Date.now()) => {
+      pollTimer = setTimeout(async () => {
+        try {
+          const res = await fetch('/api/checkout?code=' + encodeURIComponent(code));
+          const data = await res.json();
+          if (data.status === 'success') return showDone(code);
+          if (data.status === 'cancelled') { store.set(null); $('qr-wait').textContent = 'Đơn đã bị hủy. Liên hệ Zalo nếu bạn đã chuyển khoản.'; return; }
+        } catch {}
+        if (Date.now() - startedAt < 30 * 60 * 1000) poll(code, startedAt);
+        else $('qr-wait').textContent = 'Chưa nhận được thanh toán. Nếu đã chuyển, nhắn Zalo kèm mã đơn để được xác nhận tay.';
+      }, 3000);
+    };
+
+    const showQr = (order) => {
+      $('qr-img').src = order.qr;
+      $('qr-bank').textContent = order.bank;
+      $('qr-acc').textContent = order.account;
+      $('qr-name').textContent = order.accountName;
+      $('qr-amount').textContent = vnd(order.amount);
+      $('qr-code').textContent = order.code;
+      show('step-qr');
+      poll(order.code);
+    };
+
+    document.querySelectorAll('[data-copy]').forEach((btn) => btn.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText($(btn.dataset.copy).textContent); btn.textContent = 'Đã chép'; setTimeout(() => { btn.textContent = 'Chép'; }, 1500); } catch {}
+    }));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let first = null;
+      form.querySelectorAll('.f-input').forEach((f) => { const m = validate(f); setError(f, m); if (m && !first) first = f; });
+      if (first) return first.focus();
+      const btn = form.querySelector('[type="submit"]');
+      btn.disabled = true;
+      status.dataset.kind = '';
+      status.textContent = 'Đang tạo đơn...';
+      try {
+        const res = await fetch('/api/checkout', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(form))),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Tạo đơn chưa được, thử lại sau.');
+        store.set(JSON.stringify(data));
+        status.textContent = '';
+        showQr(data);
+      } catch (err) {
+        status.dataset.kind = 'error';
+        status.textContent = err.message;
+      } finally {
+        btn.disabled = false;
+      }
+    });
+
+    (async () => {
+      const saved = store.get();
+      if (saved) { try { return showQr(JSON.parse(saved)); } catch { store.set(null); } }
+      try {
+        products = await (await fetch('/api/checkout?products=1')).json();
+        const wanted = new URLSearchParams(location.search).get('p');
+        select.innerHTML = products.map((p) => `<option value="${p.slug}">${p.name} · ${vnd(p.price)}</option>`).join('');
+        if (products.some((p) => p.slug === wanted)) select.value = wanted;
+        updateTotal();
+      } catch {
+        select.innerHTML = '<option value="">Không tải được sản phẩm</option>';
+      }
+    })();
+  })();
+  </script>
+</body>
+</html>

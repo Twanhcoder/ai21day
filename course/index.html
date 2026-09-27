@@ -207,13 +207,14 @@
   <link rel="stylesheet" href="/nav.css">
   <link rel="stylesheet" href="/scroll-fx.css">
   <link rel="stylesheet" href="/chat.css?v=20260926-1">
+  <link rel="stylesheet" href="/forms.css?v=20260927-1">
   <script>
     document.documentElement.classList.add('js');
     window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
-<body data-application-url="https://docs.google.com/forms/d/e/1FAIpQLSeVbTtGn4RxosPisNFyAsDdUVhDJsSuv1xS94EcGcEEpZPVUw/viewform" data-form-embed-url="https://docs.google.com/forms/d/e/1FAIpQLSeVbTtGn4RxosPisNFyAsDdUVhDJsSuv1xS94EcGcEEpZPVUw/viewform?embedded=true" data-zalo-url="https://zalo.me/0868532538">
+<body data-zalo-url="https://zalo.me/0868532538">
   <a class="skip-link" href="#main">Đi thẳng tới nội dung</a>
 
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -452,7 +453,7 @@
             <li>Mẫu tin nhắn, báo giá và SOP làm với AI</li>
           </ul>
           <div class="application-fallback" id="application-fallback">
-            <a class="button button-primary button-block" href="https://docs.google.com/forms/d/e/1FAIpQLSeVbTtGn4RxosPisNFyAsDdUVhDJsSuv1xS94EcGcEEpZPVUw/viewform" data-application-link>Đăng ký phỏng vấn 3 phút</a>
+            <a class="button button-primary button-block" href="#dang-ky" data-application-link>Đăng ký phỏng vấn 3 phút</a>
             <p>Gửi form không mất phí. Chỉ thanh toán sau khi hai bên trao đổi và thấy phù hợp.</p>
           </div>
           <p class="application-status" id="application-status" role="status" aria-live="polite" tabindex="-1"></p>
@@ -465,7 +466,53 @@
         <strong id="application-dialog-title">Đăng ký Founding Cohort 21AISYSTEM</strong>
         <button class="application-dialog-close" type="button" data-dialog-close aria-label="Đóng form">&times;</button>
       </div>
-      <iframe id="application-frame" title="Form đăng ký Founding Cohort 21AISYSTEM">Đang tải form đăng ký</iframe>
+      <form class="f-form" id="application-form" novalidate>
+        <p class="f-status">Khoảng 3 phút. Gửi form không mất phí, Tuấn Anh sẽ nhắn Zalo hẹn trao đổi ngắn.</p>
+        <label class="f-hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
+        <label class="f-field"><span>Họ và tên <b>*</b></span><input class="f-input" name="name" autocomplete="name" required maxlength="100"><p class="f-error"></p></label>
+        <div class="f-row">
+          <label class="f-field"><span>Số điện thoại có Zalo <b>*</b></span><input class="f-input" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="0912345678" required><p class="f-error"></p></label>
+          <label class="f-field"><span>Email</span><input class="f-input" name="email" type="email" autocomplete="email" placeholder="ban@gmail.com"><p class="f-error"></p></label>
+        </div>
+        <label class="f-field"><span>Hiện tại bạn đang là <b>*</b></span>
+          <select class="f-input" name="current_status" required>
+            <option value="">Chọn một</option>
+            <option>Sinh viên năm 1-2</option>
+            <option>Sinh viên năm 3-4</option>
+            <option>Mới ra trường dưới 2 năm</option>
+            <option>Đã đi làm, muốn bắt đầu làm freelance</option>
+          </select><p class="f-error"></p></label>
+        <label class="f-field"><span>Bạn học ngành gì? <b>*</b></span><input class="f-input" name="major" required maxlength="120"><p class="f-error"></p></label>
+        <label class="f-field"><span>Muốn làm cho loại doanh nghiệp nào trước? <b>*</b></span>
+          <select class="f-input" name="niche" required>
+            <option value="">Chọn một</option>
+            <option>Spa / thẩm mỹ / làm đẹp</option>
+            <option>Nha khoa / phòng khám</option>
+            <option>Homestay / khách sạn / du lịch</option>
+            <option>Trung tâm đào tạo / dạy thêm</option>
+            <option>Quán ăn / cửa hàng</option>
+            <option>Chưa biết, muốn được gợi ý</option>
+          </select><p class="f-error"></p></label>
+        <div class="f-row">
+          <label class="f-field"><span>Đã từng có ai trả tiền cho việc bạn làm? <b>*</b></span>
+            <select class="f-input" name="paid_before" required>
+              <option value="">Chọn một</option>
+              <option>Chưa từng</option>
+              <option>Có 1-2 lần nhỏ</option>
+              <option>Có vài khách, muốn có khách đều hơn</option>
+            </select><p class="f-error"></p></label>
+          <label class="f-field"><span>Bạn đang dùng AI ở mức nào? <b>*</b></span>
+            <select class="f-input" name="ai_level" required>
+              <option value="">Chọn một</option>
+              <option>Chủ yếu hỏi đáp trên ChatGPT, Gemini, Claude</option>
+              <option>Đã dùng AI để làm ra một sản phẩm</option>
+              <option>Đã dùng AI coding agent</option>
+            </select><p class="f-error"></p></label>
+        </div>
+        <label class="f-field"><span>Điều bạn muốn Tuấn Anh biết thêm</span><textarea class="f-input" name="note" maxlength="1000"></textarea></label>
+        <button class="button button-primary button-block" type="submit">Gửi đăng ký</button>
+        <p class="f-status" role="status" aria-live="polite" data-form-status></p>
+      </form>
     </dialog>
 
     <section class="course-faq" id="faq">
@@ -542,7 +589,7 @@
   </div>
 
   <script src="/nav.js" defer></script>
-  <script src="/script.js?v=20260926-2" defer></script>
+  <script src="/script.js?v=20260927-1" defer></script>
   <script src="/scroll-fx.js" defer></script>
   <script src="/chat.js?v=20260926-4" defer></script>
 </body>

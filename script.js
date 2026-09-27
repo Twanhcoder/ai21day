@@ -203,63 +203,88 @@ document.addEventListener('DOMContentLoaded', () => {
   scrollyViewport.addEventListener?.('change', configureScrolly);
   window.addEventListener('pagehide', () => scrollyObserver?.disconnect(), { once: true });
 
-  const applicationUrl = document.body.dataset.applicationUrl?.trim();
-  const formEmbedUrl = document.body.dataset.formEmbedUrl?.trim();
   const zaloUrl = document.body.dataset.zaloUrl?.trim();
   const applicationLinks = document.querySelectorAll('[data-application-link]');
-  const applicationStatus = document.getElementById('application-status');
   const applicationDialog = document.getElementById('application-dialog');
-  const applicationFrame = document.getElementById('application-frame');
-  const canUseDialog = Boolean(formEmbedUrl && applicationFrame && applicationDialog?.showModal);
-
-  const openApplicationDialog = () => {
-    if (!applicationFrame.getAttribute('src')) applicationFrame.src = formEmbedUrl;
-    applicationDialog.showModal();
-  };
+  const applicationForm = document.getElementById('application-form');
+  const canUseDialog = Boolean(applicationForm && applicationDialog?.showModal);
 
   if (canUseDialog) {
     applicationDialog.querySelector('[data-dialog-close]')?.addEventListener('click', () => applicationDialog.close());
     applicationDialog.addEventListener('click', (event) => {
       if (event.target === applicationDialog) applicationDialog.close();
     });
+
+    const status = applicationForm.querySelector('[data-form-status]');
+    const submit = applicationForm.querySelector('[type="submit"]');
+    const phoneOk = (v) => /^(?:\+?84|0)[35789]\d{8}$/.test(v.replace(/[\s.\-()]/g, ''));
+    const emailOk = (v) => !v || /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+
+    const setError = (field, message) => {
+      field.setAttribute('aria-invalid', message ? 'true' : 'false');
+      const slot = field.closest('.f-field')?.querySelector('.f-error');
+      if (slot) slot.textContent = message || '';
+    };
+
+    const validate = (field) => {
+      const v = field.value.trim();
+      if (field.required && !v) return 'Mục này bắt buộc';
+      if (field.name === 'phone' && !phoneOk(v)) return 'SĐT chưa đúng, ví dụ 0912345678';
+      if (field.name === 'email' && !emailOk(v)) return 'Email chưa đúng định dạng';
+      return '';
+    };
+
+    applicationForm.querySelectorAll('.f-input').forEach((field) => {
+      field.addEventListener('blur', () => setError(field, validate(field)));
+    });
+
+    applicationForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      let firstInvalid = null;
+      applicationForm.querySelectorAll('.f-input').forEach((field) => {
+        const message = validate(field);
+        setError(field, message);
+        if (message && !firstInvalid) firstInvalid = field;
+      });
+      if (firstInvalid) { firstInvalid.focus(); return; }
+
+      submit.disabled = true;
+      status.dataset.kind = '';
+      status.textContent = 'Đang gửi...';
+      try {
+        const res = await fetch('/api/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(Object.fromEntries(new FormData(applicationForm))),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok) throw new Error(data.error || 'Gửi chưa được, thử lại sau ít phút.');
+        window.va?.('event', { name: 'form_submit' });
+        applicationForm.innerHTML = '<div class="f-done"><strong>Đã nhận đăng ký của bạn.</strong><p>Tuấn Anh sẽ nhắn Zalo trong 24 giờ để hẹn trao đổi ngắn. Nếu cần gấp, nhắn trực tiếp qua Zalo.</p>'
+          + (zaloUrl ? `<a class="button button-primary" href="${zaloUrl}" target="_blank" rel="noopener noreferrer">Nhắn Zalo</a>` : '') + '</div>';
+      } catch (error) {
+        status.dataset.kind = 'error';
+        status.textContent = error.message;
+        submit.disabled = false;
+      }
+    });
   }
 
   applicationLinks.forEach((link) => {
-    const liveFormUrl = applicationUrl || formEmbedUrl;
-
     if (canUseDialog) {
-      link.href = liveFormUrl;
-      link.textContent = 'Đăng ký phỏng vấn 3 phút';
       link.addEventListener('click', (event) => {
         if (event.metaKey || event.ctrlKey || event.shiftKey) return;
         event.preventDefault();
-        openApplicationDialog();
+        applicationDialog.showModal();
       });
       return;
     }
-
-    if (liveFormUrl) {
-      link.href = liveFormUrl;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.textContent = 'Đăng ký phỏng vấn 3 phút';
-      return;
-    }
-
     if (zaloUrl) {
       link.href = zaloUrl;
       link.target = '_blank';
       link.rel = 'noopener noreferrer';
       link.textContent = 'Nhận form đăng ký qua Zalo';
-      return;
     }
-
-    link.addEventListener('click', (event) => {
-      event.preventDefault();
-      if (!applicationStatus) return;
-      applicationStatus.textContent = 'Form đăng ký chưa được gắn. Điền URL vào data-application-url hoặc data-form-embed-url trong index.html trước khi xuất bản.';
-      applicationStatus.focus?.();
-    });
   });
 
   const mobileCta = document.getElementById('mobileCta');

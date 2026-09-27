@@ -1,0 +1,6 @@
+.env*
+data/
+brain.db
+supabase/
+.claude/
+*.md

@@ -1,0 +1,30 @@
+/* Form native (đăng ký, thanh toán, admin). Dùng token của course.css, có fallback khi đứng riêng. */
+.f-form { display: grid; gap: 16px; }
+.f-field { display: grid; gap: 6px; }
+.f-field > span { font-size: 0.78rem; color: var(--ink-soft, rgba(247,245,248,.72)); }
+.f-field > span b { color: var(--pink, #e86ba0); font-weight: 400; }
+.f-input {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 14px;
+  border: 1px solid var(--line, rgba(247,245,248,.14));
+  border-radius: var(--control-radius, 10px);
+  background: var(--surface-2, #151018);
+  color: var(--ink, #f7f5f8);
+  font: inherit;
+  font-size: 16px; /* chặn iOS tự zoom */
+}
+textarea.f-input { min-height: 88px; resize: vertical; }
+select.f-input { appearance: none; background-image: linear-gradient(45deg, transparent 50%, currentColor 50%), linear-gradient(135deg, currentColor 50%, transparent 50%); background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 36px; }
+.f-input:focus-visible { outline: 2px solid var(--pink, #e86ba0); outline-offset: 1px; }
+.f-input[aria-invalid="true"] { border-color: #ff7a7a; }
+.f-error { min-height: 1em; margin: 0; color: #ff9a9a; font-size: 0.74rem; }
+.f-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.f-status { margin: 0; font-size: 0.82rem; line-height: 1.5; }
+.f-status[data-kind="error"] { color: #ff9a9a; }
+.f-status[data-kind="ok"] { color: #8fe3b0; }
+.f-done { display: grid; gap: 12px; padding: 8px 0; }
+.f-done strong { font-size: 1.1rem; }
+.application-dialog .f-form { flex: 1; overflow-y: auto; padding: 22px; }
+@media (max-width: 560px) { .f-row { grid-template-columns: 1fr; } }
