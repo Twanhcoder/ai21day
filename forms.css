@@ -28,3 +28,4 @@ select.f-input { appearance: none; background-image: linear-gradient(45deg, tran
 .f-done strong { font-size: 1.1rem; }
 .application-dialog .f-form { flex: 1; overflow-y: auto; padding: 22px; }
 @media (max-width: 560px) { .f-row { grid-template-columns: 1fr; } }
+.f-hint { justify-self: start; padding: 0; border: 0; background: none; color: #f3d38a; font: inherit; font-size: 0.74rem; text-align: left; text-decoration: underline; cursor: pointer; }

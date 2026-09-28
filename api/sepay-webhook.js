@@ -1,6 +1,7 @@
 // POST /api/sepay-webhook — Sepay gọi khi tài khoản có biến động.
 // Xác thực: header "Authorization: Apikey <SEPAY_API_KEY>". Sepay cần {success:true} + HTTP 200/201, nếu không sẽ retry.
 const { db, HttpError, safeEqual, handle } = require('./_lib');
+const { sendPaidEmails } = require('./_mail');
 
 const CODE_RE = /AI21[A-Z0-9]{6}/i;
 
@@ -38,10 +39,12 @@ module.exports = handle(async (req, res) => {
   // Chuyển thiếu tiền hoặc không khớp mã: giữ pending, admin xác nhận tay.
   if (!orders.length || Number(p.transferAmount) < orders[0].amount) return res.status(200).json({ success: true });
 
-  await db(`orders?id=eq.${orders[0].id}&status=eq.pending`, {
+  const updated = await db(`orders?id=eq.${orders[0].id}&status=eq.pending`, {
     method: 'PATCH',
+    prefer: 'return=representation',
     body: { status: 'success', paid_via: 'sepay', sepay_tx_id: p.id, paid_at: new Date().toISOString() },
   });
   await db(`sepay_transactions?id=eq.${p.id}`, { method: 'PATCH', body: { order_id: orders[0].id } });
+  if (updated.length) await sendPaidEmails(orders[0].id);
   res.status(200).json({ success: true });
 });

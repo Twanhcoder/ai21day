@@ -1,6 +1,7 @@
 // /api/admin?resource=products|customers|orders[&id=] — CRUD cho trang /admin.
 // Bảo vệ bằng header "x-admin-key" = ADMIN_PASSWORD.
 const { db, HttpError, normalizePhone, isEmail, clean, safeEqual, handle } = require('./_lib');
+const { sendPaidEmails } = require('./_mail');
 
 const toInt = (v) => (v === '' || v === null || v === undefined ? null : Number.parseInt(v, 10));
 
@@ -58,6 +59,7 @@ async function handleOrders(req, res, id) {
     });
     if (b.status === 'success') {
       await db(`orders?id=eq.${order.id}`, { method: 'PATCH', body: { status: 'success', paid_via: 'manual', paid_at: new Date().toISOString() } });
+      await sendPaidEmails(order.id);
     }
     return res.status(201).json(order);
   }
@@ -68,8 +70,10 @@ async function handleOrders(req, res, id) {
     if (b.status === 'success') Object.assign(patch, { paid_via: 'manual', paid_at: new Date().toISOString() });
     if (b.status === 'pending') Object.assign(patch, { paid_via: null, paid_at: null });
     // Đơn đã hủy không mở lại, tránh lệch tồn kho.
+    const [before] = await db(`orders?select=status&id=eq.${id}`);
     const rows = await db(`orders?id=eq.${id}&status=neq.cancelled`, { method: 'PATCH', body: patch, prefer: 'return=representation' });
     if (!rows.length) throw new HttpError(409, 'Đơn đã hủy, không đổi trạng thái được');
+    if (b.status === 'success' && before?.status === 'pending') await sendPaidEmails(id);
     return res.status(200).json(rows[0]);
   }
   if (req.method === 'DELETE') {
