@@ -1,5 +1,6 @@
 // POST /api/register — form đăng ký phỏng vấn trên /course/, lưu vào bảng customers.
 const { HttpError, normalizePhone, isEmail, clean, upsertCustomer, handle } = require('./_lib');
+const { startSequence } = require('./_sequence');
 
 module.exports = handle(async (req, res) => {
   if (req.method !== 'POST') throw new HttpError(405, 'Method not allowed');
@@ -13,7 +14,7 @@ module.exports = handle(async (req, res) => {
   if (!phone) throw new HttpError(400, 'Số điện thoại chưa đúng (VD: 0912345678)');
   if (email && !isEmail(email)) throw new HttpError(400, 'Email chưa đúng định dạng');
 
-  await upsertCustomer({
+  const customer = await upsertCustomer({
     name,
     phone,
     zalo: phone,
@@ -26,5 +27,6 @@ module.exports = handle(async (req, res) => {
     note: clean(b.note, 1000),
     source: 'course-form',
   });
+  await startSequence(customer);
   res.status(200).json({ ok: true });
 });

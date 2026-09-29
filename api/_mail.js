@@ -58,7 +58,7 @@ function button(href, label) {
   </tr></table>`;
 }
 
-function layout({ preheader, badge, content }) {
+function layout({ preheader, badge, content, footer = 'Bạn nhận email này vì vừa thanh toán trên tuananhvu.com.' }) {
   return `<!DOCTYPE html>
 <html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>21AISYSTEM</title></head>
 <body style="margin:0;padding:0;background:#f2f1f3;">
@@ -77,7 +77,7 @@ function layout({ preheader, badge, content }) {
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px;">
         <tr><td style="${FONT}padding:20px 32px;font-size:12px;line-height:1.6;color:#8a8a8a;text-align:center;">
           Vũ Tuấn Anh · 21AISYSTEM · <a href="${SITE}" style="color:#8a8a8a;">tuananhvu.com</a><br>
-          Bạn nhận email này vì vừa thanh toán trên tuananhvu.com.
+          ${footer}
         </td></tr>
       </table>
     </td></tr>
@@ -196,4 +196,4 @@ async function sendPaidEmails(orderId) {
   }
 }
 
-module.exports = { sendPaidEmails, customerEmail, adminEmail };
+module.exports = { sendPaidEmails, customerEmail, adminEmail, send, layout, button, esc, FONT, ZALO, SITE };
