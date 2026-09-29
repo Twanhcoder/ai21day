@@ -54,15 +54,22 @@ function clean(value, max = 200) {
   return s ? s.slice(0, max) : null;
 }
 
-// Tạo mới hoặc cập nhật khách theo SĐT; chỉ ghi đè những trường có giá trị.
+// Dùng cho form public: tạo khách mới theo SĐT. Khách đã có thì chỉ điền thêm trường đang trống,
+// KHÔNG ghi đè — nếu ghi đè, ai biết SĐT cũng đổi được email của người khác và nhận email thanh toán của họ.
 async function upsertCustomer(fields) {
   const payload = Object.fromEntries(Object.entries(fields).filter(([, v]) => v !== null && v !== undefined));
-  const rows = await db('customers?on_conflict=phone', {
+  const inserted = await db('customers?on_conflict=phone', {
     method: 'POST',
     body: payload,
-    prefer: 'resolution=merge-duplicates,return=representation',
+    prefer: 'resolution=ignore-duplicates,return=representation',
   });
-  return rows[0];
+  if (inserted.length) return inserted[0];
+
+  const [existing] = await db(`customers?select=*&phone=eq.${payload.phone}`);
+  const blanks = Object.fromEntries(Object.entries(payload).filter(([k]) => existing[k] === null || existing[k] === ''));
+  if (!Object.keys(blanks).length) return existing;
+  const [updated] = await db(`customers?id=eq.${existing.id}`, { method: 'PATCH', body: blanks, prefer: 'return=representation' });
+  return updated;
 }
 
 function safeEqual(a, b) {

@@ -190,7 +190,7 @@
       try {
         products = await (await fetch('/api/checkout?products=1')).json();
         const wanted = new URLSearchParams(location.search).get('p');
-        select.innerHTML = products.map((p) => `<option value="${p.slug}">${p.name} · ${vnd(p.price)}</option>`).join('');
+        select.replaceChildren(...products.map((p) => new Option(`${p.name} · ${vnd(p.price)}`, p.slug)));
         if (products.some((p) => p.slug === wanted)) select.value = wanted;
         updateTotal();
       } catch {

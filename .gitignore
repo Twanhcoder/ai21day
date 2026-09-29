@@ -11,4 +11,5 @@ brain.db
 
 .env*
 .vercel
+vbsec-reports/
 supabase/.temp
