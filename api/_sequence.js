@@ -2,11 +2,16 @@
 // Nội dung gốc ở my-brain/email_sequence.md, sửa thì sửa cả hai nơi.
 // Tiến độ lưu trên customers: seq_step = số email đã gửi, seq_next_at = lúc gửi email kế tiếp (cron /api/cron-sequence quét).
 // Email có "+test" gửi cả 3 ngay để kiểm tra — chỉ khi bật SEQUENCE_TEST_MODE=1 (tắt trên production để form không bị dùng spam người khác).
+const crypto = require('crypto');
 const { db } = require('./_lib');
 const { send, layout, button, esc, FONT, ZALO, SITE } = require('./_mail');
 
 const DAY = 24 * 60 * 60 * 1000;
-const FOOTER = 'Bạn nhận email này vì đã đăng ký trên tuananhvu.com. Không muốn nhận tiếp, trả lời email này với chữ "dừng".';
+const footer = (url) => `Bạn nhận email này vì đã tích đồng ý nhận email khi đăng ký trên tuananhvu.com. Không muốn nhận tiếp? <a href="${url}" style="color:#8a8a8a;">Hủy đăng ký</a>.`;
+
+// Token hủy ký bằng HMAC theo id khách, không cần lưu thêm gì. Thiếu UNSUB_SECRET thì không gửi email nào.
+const unsubToken = (id) => crypto.createHmac('sha256', process.env.UNSUB_SECRET).update(`unsub:${id}`).digest('hex');
+const unsubUrl = (id) => `${SITE}/api/unsubscribe?id=${id}&t=${unsubToken(id)}`;
 
 // Mỗi khối: chuỗi = đoạn văn; { ol } / { ul } = danh sách; { quote } = câu dặn AI để chép; { button } / { link }: [href, label].
 const EMAILS = [
@@ -96,7 +101,7 @@ function blockText(b) {
   return href ? `${label}: ${href}` : '';
 }
 
-function sequenceEmail(step, name) {
+function sequenceEmail(step, name, unsub) {
   const e = EMAILS[step];
   const hi = `Chào ${name || 'bạn'},`;
   const sign = 'Tuấn Anh';
@@ -104,8 +109,8 @@ function sequenceEmail(step, name) {
     <p style="margin:24px 0 0;font-weight:bold;color:#111111;">${sign}</p>`;
   return {
     subject: e.subject,
-    html: layout({ preheader: e.preheader, content, footer: FOOTER }),
-    text: [hi, ...e.blocks.map(blockText), sign].join('\n\n'),
+    html: layout({ preheader: e.preheader, content, footer: footer(unsub) }),
+    text: [hi, ...e.blocks.map(blockText), sign, `Hủy đăng ký: ${unsub}`].join('\n\n'),
   };
 }
 
@@ -115,8 +120,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 function sendStep(c, step) {
   const from = `Vũ Tuấn Anh <${process.env.MAIL_FROM}>`;
   const replyTo = process.env.ADMIN_EMAIL || undefined;
-  const headers = replyTo ? { 'List-Unsubscribe': `<mailto:${replyTo}?subject=dung>` } : undefined;
-  return send({ from, to: c.email, reply_to: replyTo, headers, ...sequenceEmail(step, c.name) });
+  const url = unsubUrl(c.id);
+  const headers = { 'List-Unsubscribe': `<${url}>`, 'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click' };
+  return send({ from, to: c.email, reply_to: replyTo, headers, ...sequenceEmail(step, c.name, url) });
 }
 
 async function saveProgress(id, step) {
@@ -130,7 +136,8 @@ async function saveProgress(id, step) {
 // Gọi sau khi khách điền form. Mỗi địa chỉ email chỉ nhận chuỗi 1 lần, kể cả khi form gửi kèm SĐT khác
 // (chặn việc dùng form để spam hộp thư người khác). Lỗi chỉ ghi log để không làm hỏng việc lưu đăng ký.
 async function startSequence(c) {
-  if (!process.env.RESEND_API_KEY || !process.env.MAIL_FROM || !c?.email) return;
+  if (!process.env.RESEND_API_KEY || !process.env.MAIL_FROM || !process.env.UNSUB_SECRET || !c?.email) return;
+  if (!c.email_consent_at || c.unsubscribed_at) return;
   try {
     if (process.env.SEQUENCE_TEST_MODE === '1' && isTestEmail(c.email)) {
       for (let step = 0; step < EMAILS.length; step++) {
@@ -152,7 +159,8 @@ async function startSequence(c) {
 
 // Cron gọi: gửi email kế tiếp cho những khách đã đến hạn.
 async function sendDueEmails(limit = 50) {
-  const due = await db(`customers?select=id,name,email,seq_step&seq_step=in.(1,2)&seq_next_at=lte.${new Date().toISOString()}&email=not.is.null&order=seq_next_at.asc&limit=${limit}`);
+  if (!process.env.UNSUB_SECRET) return { due: 0, sent: 0, skipped: 'thiếu UNSUB_SECRET' };
+  const due = await db(`customers?select=id,name,email,seq_step&seq_step=in.(1,2)&seq_next_at=lte.${new Date().toISOString()}&email=not.is.null&email_consent_at=not.is.null&unsubscribed_at=is.null&order=seq_next_at.asc&limit=${limit}`);
   let sent = 0;
   for (const c of due) {
     try {
@@ -167,4 +175,4 @@ async function sendDueEmails(limit = 50) {
   return { due: due.length, sent };
 }
 
-module.exports = { startSequence, sendDueEmails, sequenceEmail, isTestEmail };
+module.exports = { startSequence, sendDueEmails, sequenceEmail, isTestEmail, unsubToken };

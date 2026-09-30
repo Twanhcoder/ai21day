@@ -32,6 +32,10 @@ module.exports = handle(async (req, res) => {
   });
   if (!inserted.length || p.transferType !== 'in') return res.status(200).json({ success: true });
 
+  if (process.env.SEPAY_ACCOUNT && String(p.accountNumber || '') !== process.env.SEPAY_ACCOUNT) {
+    console.warn('sepay: accountNumber khác SEPAY_ACCOUNT', p.id, p.accountNumber);
+  }
+
   const code = String(p.code || '').match(CODE_RE)?.[0] || String(p.content || '').match(CODE_RE)?.[0];
   if (!code) return res.status(200).json({ success: true });
 

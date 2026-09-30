@@ -23,7 +23,7 @@
 
   const QUESTIONS = [
     { id: 'major', group: 'fit', label: 'Mình học ngành không liên quan IT, có theo được không?',
-      keys: ['nganh', 'it', 'kinh te', 'du lich', 'y duoc', 'ngon ngu', 'su pham', 'marketing', 'phu hop', 'hop khong', 'theo duoc'],
+      keys: ['nganh', 'it', 'kinh te', 'du lich', 'y duoc', 'ngon ngu', 'su pham', 'marketing', 'phu hop', 'hop khong', 'theo duoc', 'hop', 'hop voi', 'sinh vien', 'moi ra truong', 'nam 3', 'nam 4', 'nam cuoi', 'co nen'],
       text: 'Được. Ngành bạn học lại là lợi thế: học du lịch thì làm cho homestay, y dược làm cho phòng khám, sư phạm làm cho trung tâm dạy thêm, kinh tế làm cho cửa hàng, spa. Bạn hiểu ngành đó hơn một bạn IT, và hiểu khách là thứ doanh nghiệp cần nhất.' },
     { id: 'code', group: 'fit', label: 'Mình không biết code thì sao?',
       keys: ['code', 'lap trinh', 'ky thuat', 'khong biet', 'dev', 'web'],

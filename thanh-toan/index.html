@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&amp;display=swap">
   <link rel="stylesheet" href="/course.css?v=20260927-1">
-  <link rel="stylesheet" href="/forms.css?v=20260928-1">
+  <link rel="stylesheet" href="/forms.css?v=20260929-1">
   <style>
     .pay { min-height: 100dvh; display: grid; place-items: start center; padding: 48px 16px 64px; }
     .pay-card { width: min(560px, 100%); display: grid; gap: 22px; padding: clamp(20px, 5vw, 32px); border: 1px solid var(--line); border-radius: var(--surface-radius); background: var(--surface); }
@@ -45,6 +45,7 @@
       <section id="step-form">
         <form class="f-form" id="checkout-form" novalidate>
           <h1>Thanh toán</h1>
+          <label class="f-hp" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off"></label>
           <label class="f-field"><span>Sản phẩm <b>*</b></span>
             <select class="f-input" name="product" id="product" required><option value="">Đang tải...</option></select>
             <p class="f-error"></p></label>
@@ -70,6 +71,7 @@
           </dl>
           <p class="f-status">Nếu chuyển khoản thủ công, ghi <strong>đúng nội dung</strong> ở trên để hệ thống tự xác nhận.</p>
           <div class="pay-wait" id="qr-wait" role="status" aria-live="polite"><span class="pay-dot"></span><span>Đang chờ thanh toán, trang sẽ tự cập nhật...</span></div>
+          <button class="button button-ghost button-block" type="button" id="new-order">Không phải đơn của tôi? Tạo đơn khác</button>
         </div>
       </section>
 
@@ -111,7 +113,11 @@
       f.setAttribute('aria-invalid', msg ? 'true' : 'false');
       f.closest('.f-field').querySelector('.f-error').textContent = msg;
     };
-    form.querySelectorAll('.f-input').forEach((f) => f.addEventListener('blur', () => setError(f, validate(f))));
+    form.querySelectorAll('.f-input').forEach((f) => {
+      f.addEventListener('blur', () => setError(f, validate(f)));
+      // Đã báo lỗi thì kiểm tra lại ngay khi gõ, để lỗi tự mất khi nhập đúng.
+      f.addEventListener('input', () => { if (f.getAttribute('aria-invalid') === 'true') setError(f, validate(f)); });
+    });
 
     const updateTotal = () => {
       const p = products.find((x) => x.slug === select.value);
@@ -173,7 +179,7 @@
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error || 'Tạo đơn chưa được, thử lại sau.');
-        store.set(JSON.stringify(data));
+        store.set(JSON.stringify({ ...data, savedAt: Date.now() }));
         status.textContent = '';
         showQr(data);
       } catch (err) {
@@ -185,8 +191,15 @@
     });
 
     (async () => {
+      // Khôi phục đơn đang chờ trước (nếu còn mới, dưới 30 phút) để không bị nháy form; sản phẩm tải sau.
       const saved = store.get();
-      if (saved) { try { return showQr(JSON.parse(saved)); } catch { store.set(null); } }
+      if (saved) {
+        try {
+          const order = JSON.parse(saved);
+          if (Date.now() - (order.savedAt || 0) < 30 * 60 * 1000) showQr(order);
+          else store.set(null);
+        } catch { store.set(null); }
+      }
       try {
         products = await (await fetch('/api/checkout?products=1')).json();
         const wanted = new URLSearchParams(location.search).get('p');
@@ -197,6 +210,12 @@
         select.innerHTML = '<option value="">Không tải được sản phẩm</option>';
       }
     })();
+
+    $('new-order').addEventListener('click', () => {
+      clearTimeout(pollTimer);
+      store.set(null);
+      show('step-form');
+    });
   })();
   </script>
   <script src="/email-hint.js?v=20260928-1"></script>

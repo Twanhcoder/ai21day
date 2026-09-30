@@ -20,6 +20,8 @@ select.f-input { appearance: none; background-image: linear-gradient(45deg, tran
 .f-input[aria-invalid="true"] { border-color: #ff7a7a; }
 .f-error { min-height: 1em; margin: 0; color: #ff9a9a; font-size: 0.74rem; }
 .f-hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.f-check { display: flex; gap: 10px; align-items: flex-start; font-size: 0.82rem; line-height: 1.5; cursor: pointer; }
+.f-check input { width: 18px; height: 18px; margin-top: 2px; flex: none; accent-color: var(--pink, #e86ba0); }
 .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .f-status { margin: 0; font-size: 0.82rem; line-height: 1.5; }
 .f-status[data-kind="error"] { color: #ff9a9a; }

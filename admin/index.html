@@ -187,7 +187,6 @@
       if (r.status === 'pending') out.push(`<button class="act act-ok" data-status="success" data-id="${r.id}">Đã nhận tiền</button>`);
       if (r.status === 'success') out.push(`<button class="act" data-status="pending" data-id="${r.id}">Về chờ</button>`);
       if (r.status !== 'cancelled') out.push(`<button class="act" data-status="cancelled" data-id="${r.id}">Hủy đơn</button>`);
-      out.push(`<button class="act act-danger" data-del="${r.id}">Xóa</button>`);
       return out.join('');
     }
 

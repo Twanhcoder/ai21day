@@ -33,7 +33,8 @@ async function db(path, { method = 'GET', body, prefer } = {}) {
     if (msg.includes('PRODUCT_NOT_FOUND')) throw new HttpError(404, 'Không tìm thấy sản phẩm');
     if (data?.code === '23503') throw new HttpError(409, 'Không xóa được vì đang có đơn hàng liên kết');
     if (data?.code === '23505') throw new HttpError(409, 'Dữ liệu bị trùng (số điện thoại hoặc slug đã tồn tại)');
-    throw new HttpError(res.status >= 500 ? 502 : 400, msg);
+    console.error('supabase error', res.status, data?.code, msg); // chi tiết chỉ ghi log server, không trả về khách
+    throw new HttpError(res.status >= 500 ? 502 : 400, res.status >= 500 ? 'Hệ thống đang bận, thử lại sau ít phút.' : 'Dữ liệu chưa hợp lệ, kiểm tra lại và thử lại.');
   }
   return data;
 }
@@ -78,6 +79,19 @@ function safeEqual(a, b) {
   return x.length > 0 && x.length === y.length && crypto.timingSafeEqual(x, y);
 }
 
+// Giới hạn tần suất dùng bảng rate_events (serverless không giữ trạng thái giữa các lần gọi).
+function clientIp(req) {
+  return String(req.headers['x-forwarded-for'] || req.socket?.remoteAddress || 'unknown').split(',')[0].trim().slice(0, 64);
+}
+
+async function rateCount(bucket, windowMs, max) {
+  const since = new Date(Date.now() - windowMs).toISOString();
+  const rows = await db(`rate_events?select=id&bucket=eq.${encodeURIComponent(bucket)}&created_at=gte.${since}&limit=${max}`);
+  return rows.length;
+}
+
+const rateHit = (bucket) => db('rate_events', { method: 'POST', body: { bucket } });
+
 function qrUrl(amount, code) {
   const params = new URLSearchParams({
     acc: process.env.SEPAY_ACCOUNT || '',
@@ -101,4 +115,4 @@ function handle(fn) {
   };
 }
 
-module.exports = { db, HttpError, normalizePhone, isEmail, clean, upsertCustomer, safeEqual, qrUrl, handle };
+module.exports = { db, HttpError, normalizePhone, isEmail, clean, upsertCustomer, safeEqual, qrUrl, handle, clientIp, rateCount, rateHit };

@@ -1,6 +1,6 @@
 // /api/admin?resource=products|customers|orders[&id=] — CRUD cho trang /admin.
 // Bảo vệ bằng header "x-admin-key" = ADMIN_PASSWORD.
-const { db, HttpError, normalizePhone, isEmail, clean, safeEqual, handle } = require('./_lib');
+const { db, HttpError, normalizePhone, isEmail, clean, safeEqual, handle, clientIp, rateCount, rateHit } = require('./_lib');
 const { sendPaidEmails } = require('./_mail');
 
 const toInt = (v) => (v === '' || v === null || v === undefined ? null : Number.parseInt(v, 10));
@@ -77,18 +77,24 @@ async function handleOrders(req, res, id) {
     return res.status(200).json(rows[0]);
   }
   if (req.method === 'DELETE') {
-    // Hủy trước để trigger trả lại tồn kho (nếu là hàng vật lý), rồi mới xóa.
-    await db(`orders?id=eq.${id}&status=neq.cancelled`, { method: 'PATCH', body: { status: 'cancelled' } });
-    await db(`sepay_transactions?order_id=eq.${id}`, { method: 'PATCH', body: { order_id: null } });
-    await db(`orders?id=eq.${id}`, { method: 'DELETE' });
-    return res.status(204).end();
+    // Đơn là sổ ghi tiền nên không xóa, chỉ hủy (trigger trả lại tồn kho nếu là hàng vật lý).
+    throw new HttpError(405, 'Không xóa đơn, hãy dùng "Hủy đơn"');
   }
   throw new HttpError(405, 'Method not allowed');
 }
 
 module.exports = handle(async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
-  if (!safeEqual(req.headers['x-admin-key'], process.env.ADMIN_PASSWORD)) throw new HttpError(401, 'Sai mật khẩu admin');
+  // Khóa tạm khi nhập sai nhiều lần: 5 lần/15 phút cho mỗi IP, 40 lần/15 phút cho toàn hệ thống.
+  const ipBucket = `admin-fail:${clientIp(req)}`;
+  const WINDOW = 15 * 60 * 1000;
+  if ((await rateCount(ipBucket, WINDOW, 5)) >= 5 || (await rateCount('admin-fail:all', WINDOW, 40)) >= 40) {
+    throw new HttpError(429, 'Nhập sai quá nhiều lần, thử lại sau 15 phút');
+  }
+  if (!safeEqual(req.headers['x-admin-key'], process.env.ADMIN_PASSWORD)) {
+    await Promise.all([rateHit(ipBucket), rateHit('admin-fail:all')]);
+    throw new HttpError(401, 'Sai mật khẩu admin');
+  }
 
   const resource = RESOURCES[req.query.resource];
   if (!resource) throw new HttpError(404, 'Resource không tồn tại');

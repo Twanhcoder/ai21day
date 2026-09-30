@@ -236,6 +236,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     applicationForm.querySelectorAll('.f-input').forEach((field) => {
       field.addEventListener('blur', () => setError(field, validate(field)));
+      // Đã báo lỗi thì kiểm tra lại ngay khi gõ, để lỗi tự mất khi nhập đúng.
+      field.addEventListener('input', () => { if (field.getAttribute('aria-invalid') === 'true') setError(field, validate(field)); });
     });
 
     applicationForm.addEventListener('submit', async (event) => {

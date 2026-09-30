@@ -2,7 +2,7 @@
 //   GET  ?products=1      → danh sách sản phẩm đang bán
 //   GET  ?code=AI21XXXXXX → trạng thái đơn (trang thanh toán poll)
 //   POST {name, phone, email, product} → tạo khách + đơn pending, trả QR Sepay
-const { db, HttpError, normalizePhone, isEmail, clean, upsertCustomer, qrUrl, handle } = require('./_lib');
+const { db, HttpError, normalizePhone, isEmail, clean, upsertCustomer, qrUrl, handle, clientIp, rateCount, rateHit } = require('./_lib');
 
 module.exports = handle(async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
@@ -22,6 +22,12 @@ module.exports = handle(async (req, res) => {
 
   if (req.method !== 'POST') throw new HttpError(405, 'Method not allowed');
   const b = req.body || {};
+  if (b.website) return res.status(200).json({ ok: true }); // honeypot chống bot
+
+  // Mỗi IP tối đa 10 đơn/giờ; mỗi khách tối đa 3 đơn chờ thanh toán trong 24 giờ (đơn chờ đã trừ tồn kho hàng vật lý).
+  const ipBucket = `checkout:${clientIp(req)}`;
+  if ((await rateCount(ipBucket, 60 * 60 * 1000, 10)) >= 10) throw new HttpError(429, 'Bạn thao tác quá nhiều, thử lại sau ít phút');
+  await rateHit(ipBucket);
   const name = clean(b.name, 100);
   const phone = normalizePhone(b.phone);
   const email = clean(b.email, 150);
@@ -34,6 +40,9 @@ module.exports = handle(async (req, res) => {
   if (!products.length) throw new HttpError(404, 'Không tìm thấy sản phẩm');
 
   const customer = await upsertCustomer({ name, phone, zalo: phone, email: email.toLowerCase(), source: 'checkout' });
+  const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+  const pending = await db(`orders?select=id&customer_id=eq.${customer.id}&status=eq.pending&created_at=gte.${since}&limit=3`);
+  if (pending.length >= 3) throw new HttpError(429, 'Bạn đang có 3 đơn chờ thanh toán, hoàn tất hoặc chờ đơn cũ hết hạn');
   const order = await db('rpc/create_order', {
     method: 'POST',
     body: { p_customer_id: customer.id, p_product_id: products[0].id, p_quantity: 1 },

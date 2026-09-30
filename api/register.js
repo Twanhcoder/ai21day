@@ -19,6 +19,7 @@ module.exports = handle(async (req, res) => {
     phone,
     zalo: phone,
     email: email?.toLowerCase(),
+    email_consent_at: email && (b.email_consent === 'on' || b.email_consent === true) ? new Date().toISOString() : undefined,
     current_status: clean(b.current_status),
     major: clean(b.major),
     niche: clean(b.niche),
@@ -27,6 +28,7 @@ module.exports = handle(async (req, res) => {
     note: clean(b.note, 1000),
     source: 'course-form',
   });
-  await startSequence(customer);
+  // Chỉ vào chuỗi khi email đã lưu chính là email vừa nhập (khách cũ giữ email cũ thì không dùng sự đồng ý mới).
+  if (email && customer.email === email.toLowerCase()) await startSequence(customer);
   res.status(200).json({ ok: true });
 });
