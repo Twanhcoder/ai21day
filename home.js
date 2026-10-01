@@ -7,6 +7,16 @@
   const isSmall = window.matchMedia('(max-width: 767px)').matches;
   // Small screens get the lighter portrait/720p encodes
   const videoSrc = (video) => (isSmall && video.dataset.srcMobile) || video.dataset.src;
+  // Hero copy is editable remotely (site_settings via MCP); the HTML text stays as fallback
+  const heroCopy = fetch('/api/settings').then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  const applyHeroCopy = (settings) => {
+    const title = document.querySelector('.hero-title');
+    const lines = title ? title.querySelectorAll('[data-scramble-in]') : [];
+    const values = [settings?.hero_title_1, settings?.hero_title_2];
+    if (lines.length !== 2 || values.some((v) => typeof v !== 'string' || !v.trim())) return;
+    lines.forEach((el, i) => { el.dataset.original = values[i]; });
+    title.setAttribute('aria-label', values.join(' '));
+  };
   const loadVideo = (video) => {
     if (video.getAttribute('src') || !video.dataset.src) return;
     video.src = videoSrc(video);
@@ -237,10 +247,12 @@
     initInView();
     initVideoVisibility();
 
-    // Entrance: content fades in after 800ms, headings scramble in on their own delays
+    // Entrance: content fades in after 800ms, headings scramble in on their own delays.
+    // Hero copy waits for /api/settings at most 1.5s, then falls back to the HTML text.
+    const copyReady = Promise.race([heroCopy, new Promise((r) => setTimeout(r, 1500))]).then(applyHeroCopy);
     setTimeout(() => {
       root.classList.add('entered');
-      scrambleEls.forEach((el) => scrambleIn(el, Number(el.dataset.scrambleIn) || 0));
+      copyReady.finally(() => scrambleEls.forEach((el) => scrambleIn(el, Number(el.dataset.scrambleIn) || 0)));
     }, reducedMotion ? 0 : 800);
   });
 })();
