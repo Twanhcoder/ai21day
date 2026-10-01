@@ -1,0 +1,16 @@
+{
+  "name": "ai21day-mcp",
+  "private": true,
+  "description": "MCP server cho goClaw: đổi nội dung landing, báo cáo đơn, xem đăng ký mới (Supabase).",
+  "main": "server.js",
+  "scripts": {
+    "start": "node --env-file=../.env server.js"
+  },
+  "engines": {
+    "node": ">=20.6"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.31.0",
+    "zod": "^3.25.0"
+  }
+}

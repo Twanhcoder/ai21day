@@ -13,9 +13,10 @@
     const title = document.querySelector('.hero-title');
     const lines = title ? title.querySelectorAll('[data-scramble-in]') : [];
     const values = [settings?.hero_title_1, settings?.hero_title_2];
-    if (lines.length !== 2 || values.some((v) => typeof v !== 'string' || !v.trim())) return;
+    // Line 1 is required; line 2 may be empty for a one-line title
+    if (lines.length !== 2 || typeof values[0] !== 'string' || !values[0].trim() || typeof values[1] !== 'string') return;
     lines.forEach((el, i) => { el.dataset.original = values[i]; });
-    title.setAttribute('aria-label', values.join(' '));
+    title.setAttribute('aria-label', values.filter((v) => v.trim()).join(' '));
   };
   const loadVideo = (video) => {
     if (video.getAttribute('src') || !video.dataset.src) return;

@@ -4,3 +4,4 @@ brain.db
 supabase/
 .claude/
 *.md
+mcp/

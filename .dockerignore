@@ -1,0 +1,7 @@
+# Chỉ MCP được build bằng Docker — whitelist đúng file cần, tránh gửi video/asset nặng vào build context.
+*
+!api/_lib.js
+!mcp/package.json
+!mcp/package-lock.json
+!mcp/server.js
+!mcp/tools.js

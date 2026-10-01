@@ -1,0 +1,32 @@
+# MCP chạy cạnh goClaw, chung mạng Docker nội bộ, KHÔNG mở port ra ngoài.
+# Compose riêng (không nằm trong compose của goClaw) để deploy.sh của goClaw (--remove-orphans) không đụng tới.
+# Chạy: docker compose -f mcp/docker-compose.yml up -d --build   (từ /opt/ai21day)
+services:
+  mcp:
+    build:
+      context: ..
+      dockerfile: mcp/Dockerfile
+    image: ai21day-mcp
+    container_name: ai21day-mcp
+    restart: unless-stopped
+    env_file:
+      - ../.env
+    environment:
+      MCP_HOST: 0.0.0.0
+      MCP_PORT: "3001"
+    mem_limit: 160m
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    networks: [goclaw]
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3001/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  goclaw:
+    external: true
+    name: goclaw_internal
