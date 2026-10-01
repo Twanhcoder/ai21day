@@ -142,6 +142,7 @@
         return;
       }
       say(data.reply);
+      offerSuggestions();
     } catch (_) {
       typing.remove();
       track('chat_error', { status: 0 });
@@ -153,10 +154,18 @@
     }
   }
 
+  // Hiện lại các câu gợi ý khách chưa bấm, để họ hỏi tiếp mà không phải gõ.
+  const asked = new Set();
+  function offerSuggestions() {
+    const rest = SUGGESTIONS.filter((label) => !asked.has(label));
+    if (!rest.length) return;
+    offer(rest.map((label) => ({ label, run: () => { asked.add(label); ask(label, 'chip'); } })));
+  }
+
   const start = () => {
     started = true;
     say(GREETING);
-    offer(SUGGESTIONS.map((label) => ({ label, run: () => ask(label, 'chip') })));
+    offerSuggestions();
   };
 
   function open() {
