@@ -7,6 +7,27 @@ const WEBHOOK_TOKEN = process.env.GOCLAW_WEBHOOK_TOKEN;
 const TIMEOUT_MS = 45000;
 const SESSION_RE = /^[a-z0-9-]{8,64}$/;
 
+// Khung quy tắc cho kênh website: agent dùng chung với Telegram nên persona gốc không đổi,
+// chỉ ép cách trả lời khi khách hỏi từ ô chat trên trang 21AISYSTEM.
+const WEB_RULES = [
+  '[Kênh: ô chat tư vấn trên website 21AISYSTEM. Quy tắc trả lời cho kênh này:',
+  '- Tra tài liệu tu-van-21aisystem.md trong vault, chỉ dùng thông tin trong đó, không bịa.',
+  '- Xưng "mình", gọi "bạn". Tên chương trình viết đúng là 21AISYSTEM.',
+  '- 2 đến 4 câu, văn bản thuần. Không markdown, không gạch đầu dòng, không khối code, không đưa prompt mẫu, không giao bài tập.',
+  '- Không hứa thu nhập. Câu nào tài liệu không có thì nói chưa chắc và mời nhắn Zalo Tuấn Anh.',
+  '- Không yêu cầu số điện thoại hay email. Muốn đăng ký thì bấm nút Đăng ký phỏng vấn trên trang.]',
+  'Câu hỏi của khách:',
+].join('\n');
+
+// Lưới an toàn: bỏ khối code và ký hiệu markdown nếu agent vẫn lỡ dùng.
+const toPlainText = (text) => text
+  .replace(/```[\s\S]*?```/g, '')
+  .replace(/`([^`]+)`/g, '$1')
+  .replace(/\*\*([^*]+)\*\*/g, '$1')
+  .replace(/^#{1,6}\s+/gm, '')
+  .replace(/\n{3,}/g, '\n\n')
+  .trim();
+
 module.exports = handle(async (req, res) => {
   if (req.method !== 'POST') throw new HttpError(405, 'Method not allowed');
   if (!WEBHOOK_TOKEN) throw new HttpError(503, 'Trợ lý đang bảo trì');
@@ -28,7 +49,7 @@ module.exports = handle(async (req, res) => {
     upstream = await fetch(WEBHOOK_URL, {
       method: 'POST',
       headers: { Authorization: `Bearer ${WEBHOOK_TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ input: message, session_key: `web-${session}`, mode: 'sync' }),
+      body: JSON.stringify({ input: `${WEB_RULES}\n${message}`, session_key: `web-${session}`, mode: 'sync' }),
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
   } catch (err) {
@@ -42,5 +63,7 @@ module.exports = handle(async (req, res) => {
     throw new HttpError(upstream.status === 429 ? 429 : 502, 'Trợ lý đang bận, bạn thử lại sau ít phút hoặc nhắn Zalo nhé');
   }
 
-  res.status(200).json({ reply: data.output.trim().slice(0, 4000) });
+  const reply = toPlainText(data.output).slice(0, 4000);
+  if (!reply) throw new HttpError(502, 'Trợ lý đang bận, bạn thử lại sau ít phút hoặc nhắn Zalo nhé');
+  res.status(200).json({ reply });
 });
