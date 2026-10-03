@@ -1,20 +1,21 @@
 # Vũ Tuấn Anh / 21AISYSTEM
 
-> tuananhvu.com là website của Vũ Tuấn Anh, người làm website và AI automation cho doanh nghiệp nhỏ tại Việt Nam, đồng thời phụ trách 21AISYSTEM: thử thách thực hành 21 ngày giúp sinh viên dùng AI làm landing page, hệ thống nhận khách cho doanh nghiệp nhỏ và có khách trả tiền đầu tiên.
+> tuananhvu.com là website của Vũ Tuấn Anh, người làm web, AI và automation cho doanh nghiệp nhỏ tại Việt Nam, đồng thời phụ trách 21AISYSTEM First Project Challenge: thử thách thực hành 21 ngày giúp sinh viên dùng AI làm dự án đầu tay, một web/assistant có người dùng thật, ghi được vào CV.
 
-## 21AISYSTEM
+## 21AISYSTEM First Project Challenge
 
-- Dành cho: sinh viên sắp và mới ra trường, ngành nào cũng được. Ngành học là ngách khách đầu tiên (du lịch làm cho homestay, y dược làm cho phòng khám, kinh tế làm cho cửa hàng, spa).
-- Đầu ra được đo: 1 khách trả tiền cho dịch vụ làm bằng AI, bất kể số tiền, trong 45 ngày kể từ 12/10/2026.
-- Lộ trình: Ngày 1-6 chọn dịch vụ và dựng 1 landing mẫu; Ngày 7-12 hệ thống nhận khách (form, Zalo, báo giá); Ngày 13-17 tìm và nhắn 30 doanh nghiệp; Ngày 18-21 chốt, giao việc, kế hoạch 45 ngày.
-- Lịch Founding Cohort: 12/10/2026 đến 01/11/2026, 2 giờ mỗi ngày, trực tuyến, 4 buổi review nhóm.
-- Học phí Founding: 990.000đ, 3 suất. Đợt sau 2.490.000đ.
-- Hoàn 50% (495.000đ) khi nộp đủ 21 nhiệm vụ đúng hạn và có 1 khách trả tiền trong 45 ngày. Không hứa thu nhập.
-- Đăng ký: form phỏng vấn 3 phút, không mất phí; cọc 500.000đ sau khi hai bên trao đổi và thấy phù hợp.
+- Dành cho: sinh viên năm 3-4 hoặc vừa ra trường, ngành nào cũng được. Nên chọn ngách gần ngành học hoặc người quen (du lịch làm cho homestay, sư phạm làm cho trung tâm dạy thêm, kinh tế làm cho cửa hàng, spa, y dược làm cho phòng khám, nhà thuốc).
+- Đầu ra sau 21 ngày: một web/assistant có người dùng thật đang dùng, case study 1 trang, một dòng CV/portfolio, một skill/SOP để làm lại, danh sách 30 doanh nghiệp cùng ngách kèm kế hoạch nhắn/follow-up sau Demo Day, kế hoạch 45 ngày tiếp cận khách trả tiền đầu tiên.
+- Không cam kết có khách trong 21 ngày. Chặng có khách trả tiền là 45 ngày sau đó. Không hứa thu nhập.
+- Lộ trình: Tuần 1 chọn ngách, dựng landing mẫu, lấy phản hồi và tìm 1 người dùng thật; Tuần 2 dựng web/assistant chạy thật cho người dùng thật (form, Zalo, FAQ, assistant trả lời theo dữ liệu); Tuần 3 viết case study, dòng CV/portfolio, chuẩn bị danh sách 30 doanh nghiệp, kế hoạch 45 ngày, Demo Day 3 phút.
+- Lịch Founding Cohort: 12/10/2026 đến 01/11/2026, khoảng 2 giờ mỗi ngày, trực tuyến, 4 buổi review nhóm (12/10, 18/10, 25/10, 01/11). Không review 1-1.
+- Học phí: 990.000đ, chỉ nhận 3 người. Đặt cọc 300.000đ giữ chỗ; 690.000đ còn lại thanh toán sau buổi khởi động 12/10 nếu học tiếp, không phù hợp thì dừng và không đóng thêm. Cọc không hoàn, trừ khi chương trình không mở.
+- Hoàn 100% học phí (990.000đ) khi nộp đủ 21 nhiệm vụ đúng hạn, có 1 khách trả tiền trong 45 ngày kể từ ngày bắt đầu, có bằng chứng và đồng ý chia sẻ câu chuyện công khai. Đây là phần thưởng, không phải cam kết ra đơn.
+- Đăng ký: form phỏng vấn 3 phút, không mất phí; đặt cọc sau khi hai bên trao đổi và thấy phù hợp.
 
 ## Trang chính
 
-- [21AISYSTEM](https://www.tuananhvu.com/course/): thông tin chương trình, lộ trình, học phí, FAQ
+- [21AISYSTEM First Project Challenge](https://www.tuananhvu.com/course/): thông tin chương trình, lộ trình, học phí, FAQ
 - [Trang chủ](https://www.tuananhvu.com/): giới thiệu Vũ Tuấn Anh
 
 ## Liên hệ
