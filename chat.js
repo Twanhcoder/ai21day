@@ -9,11 +9,11 @@
   // Gợi ý câu hỏi để bắt đầu nhanh; câu trả lời do agent tạo.
   const SUGGESTIONS = [
     'Mình học ngành không liên quan IT, có theo được không?',
-    'Mình không biết code thì sao?',
+    'Mình chưa biết code thì sao?',
+    'Chương trình có cam kết có khách trong 21 ngày không?',
     '21 ngày cụ thể làm những gì?',
     'Học phí bao nhiêu, thanh toán thế nào?',
-    'Có hoàn tiền không?',
-    'Học xong kiếm được bao nhiêu?'
+    'Có hoàn học phí không?'
   ];
 
   const track = (name, data) => { try { window.va?.('event', { name, data }); } catch (_) { /* analytics không bắt buộc */ } };

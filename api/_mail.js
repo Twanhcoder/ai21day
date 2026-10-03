@@ -18,8 +18,8 @@ const NEXT_STEPS = {
     title: 'Suất Founding của bạn đã được giữ',
     steps: [
       'Tuấn Anh sẽ nhắn Zalo cho bạn trong vòng 24 giờ để xác nhận thông tin và lịch học.',
-      'Khoản cọc 500.000đ được trừ thẳng vào học phí 990.000đ. Phần còn lại là 490.000đ, thanh toán trước ngày khai giảng.',
-      'Khai giảng 12/10/2026, học trực tuyến. Nếu lớp không đủ điều kiện mở, bạn được hoàn lại toàn bộ tiền cọc.',
+      'Khoản cọc 300.000đ nằm trong học phí 990.000đ. Phần còn lại 690.000đ chỉ thanh toán sau buổi khởi động 12/10, nếu bạn thấy chương trình đúng thứ mình cần. Thấy không phù hợp thì bạn dừng lại, không cần đóng thêm.',
+      'Khai giảng 12/10/2026, học trực tuyến. Cọc không hoàn sau khi đã giữ chỗ, trừ khi lớp không đủ điều kiện mở: khi đó bạn được hoàn lại toàn bộ tiền cọc.',
     ],
   },
   founding: {
@@ -27,7 +27,7 @@ const NEXT_STEPS = {
     steps: [
       'Tuấn Anh sẽ nhắn Zalo cho bạn trong vòng 24 giờ, gửi link nhóm học và lịch 21 ngày.',
       'Khai giảng 12/10/2026, học trực tuyến, Demo Day 01/11/2026.',
-      'Trước ngày khai giảng, bạn chuẩn bị giúp mình một máy tính và 2 giờ mỗi ngày cho thử thách.',
+      'Trước ngày khai giảng, bạn chuẩn bị giúp mình laptop, internet ổn, một tài khoản AI cơ bản và khoảng 2 giờ mỗi ngày cho thử thách.',
     ],
   },
 };
