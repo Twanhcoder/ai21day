@@ -705,3 +705,69 @@ html:has(.application-dialog[open]) { overflow: hidden; }
 @media (max-width: 680px) {
   .course-summary div { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* First Project Challenge: khối cam kết, ví dụ CV, lộ trình 3 tuần, bộ công cụ, nhịp học, hoàn học phí */
+.course-kicker { margin: 0 0 18px; color: var(--pink); font-size: 0.78rem; font-weight: 700; letter-spacing: 0.04em; }
+.course-section-head p strong { color: var(--ink); font-weight: 700; }
+.course-promise-split { display: grid; grid-template-columns: 1fr 1fr; margin-top: 44px; border-top: 1px solid var(--line); }
+.course-section-head .course-promise-split p { margin: 0; padding: 22px 24px 0 0; font-size: 0.9rem; }
+.course-section-head .course-promise-split p + p { padding-left: 24px; border-left: 1px solid var(--line); }
+.course-promise-split span { display: block; margin-bottom: 8px; color: var(--ink); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+.course-promise-split p + p span { color: var(--pink); }
+
+.course-asset-list--six { grid-template-columns: repeat(3, 1fr); row-gap: 8px; }
+.course-cv-example { max-width: 760px; margin: 44px 0 0; padding: 18px 22px; border-left: 3px solid var(--pink); background: rgba(5, 4, 7, 0.56); backdrop-filter: blur(8px); }
+.course-cv-example span { display: block; margin-bottom: 8px; color: rgba(247, 245, 248, 0.7); font-size: 0.72rem; font-weight: 700; }
+.course-cv-example p { margin: 0; color: var(--ink); font-size: 0.92rem; }
+
+.course-roadmap-track--weeks { grid-template-columns: repeat(3, 1fr); }
+.course-roadmap-track--weeks > li { display: flex; flex-direction: column; }
+.course-week-goal { margin: 16px 0 0; color: rgba(247, 245, 248, 0.82); font-size: 0.86rem; }
+.course-week-tasks { margin-top: 18px; border-top: 1px solid rgba(247, 245, 248, 0.2); }
+.course-week-tasks summary { padding-top: 14px; color: var(--pink); font-size: 0.78rem; font-weight: 700; cursor: pointer; }
+.course-week-tasks ul { margin: 12px 0 0; padding-left: 18px; color: rgba(247, 245, 248, 0.82); font-size: 0.8rem; }
+.course-roadmap-track .course-week-tasks li { min-height: 0; padding: 3px 0; border: 0; background: none; backdrop-filter: none; }
+.course-roadmap-track--weeks strong { margin-top: auto; padding-top: 28px; line-height: 1.5; }
+
+.course-kit-grid { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
+.course-kit-grid article { padding: 28px 24px 0 0; }
+.course-kit-grid article + article { padding-left: 24px; border-left: 1px solid var(--line); }
+.course-kit-grid span { color: var(--pink); font-size: 0.75rem; font-weight: 700; }
+.course-kit-grid h3 { margin-top: 18px; font-size: clamp(1.2rem, 1.6vw, 1.5rem); line-height: 1.15; }
+.course-kit-grid p { margin: 16px 0 0; color: var(--ink-soft); font-size: 0.84rem; }
+
+.course-not-fit ul { margin: 14px 0 0; padding-left: 18px; color: var(--ink-soft); font-size: 0.84rem; }
+.course-rhythm { margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--line); }
+.course-rhythm h3 { font-size: 1.1rem; }
+.course-rhythm ul { display: grid; gap: 10px; margin: 16px 0 0; padding-left: 18px; color: var(--ink-soft); font-size: 0.84rem; }
+.course-price-panel > p b { color: var(--ink); }
+.course-price-refund a { color: var(--pink); text-decoration: underline; text-underline-offset: 3px; }
+
+.course-refund-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1px solid var(--line); }
+.course-refund-grid > div { padding: 30px 32px 0 0; }
+.course-refund-grid > div + div { padding-left: 32px; border-left: 1px solid var(--line); }
+.course-refund-grid h3 { font-size: clamp(1.2rem, 1.8vw, 1.6rem); line-height: 1.2; }
+.course-refund-grid h3 strong { color: var(--pink); font-weight: 400; }
+.course-refund-list { display: grid; gap: 12px; margin: 22px 0 0; padding-left: 22px; color: var(--ink-soft); }
+.course-refund-list--plain { list-style: "– "; }
+
+@media (max-width: 1100px) {
+  .course-kit-grid { grid-template-columns: 1fr 1fr; }
+  .course-kit-grid article:nth-child(3) { padding-left: 0; border-left: 0; }
+  .course-kit-grid article:nth-child(n+3) { margin-top: 28px; border-top: 1px solid var(--line); }
+  .course-roadmap-track--weeks { grid-template-columns: 1fr; }
+  .course-roadmap-track--weeks > li + li { border-left: 0; border-top: 1px solid rgba(247, 245, 248, 0.2); }
+}
+
+@media (max-width: 680px) {
+  .course-promise-split, .course-refund-grid, .course-kit-grid { grid-template-columns: 1fr; }
+  .course-section-head .course-promise-split p + p,
+  .course-refund-grid > div + div,
+  .course-kit-grid article + article { padding-left: 0; border-left: 0; }
+  .course-section-head .course-promise-split p + p { margin-top: 22px; border-top: 1px solid var(--line); }
+  .course-refund-grid > div + div { margin-top: 30px; border-top: 1px solid var(--line); }
+  .course-kit-grid article { padding-right: 0; }
+  .course-kit-grid article + article { margin-top: 28px; border-top: 1px solid var(--line); }
+  .course-asset-list--six { grid-template-columns: 1fr 1fr; }
+  .course-cv-example { margin-top: 32px; }
+}
