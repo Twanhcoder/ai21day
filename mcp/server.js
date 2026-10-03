@@ -5,7 +5,7 @@ const { z } = require('zod');
 const { McpServer } = require('@modelcontextprotocol/sdk/server/mcp.js');
 const { StreamableHTTPServerTransport } = require('@modelcontextprotocol/sdk/server/streamableHttp.js');
 const { safeEqual } = require('../api/_lib');
-const { doiTieuDeLanding, baoCaoDonHomNay, dangKyMoi } = require('./tools');
+const { doiTieuDeLanding, baoCaoDonHomNay, dangKyMoi, tinHieuMoi } = require('./tools');
 
 const TOKEN = process.env.MCP_TOKEN;
 const HOST = process.env.MCP_HOST || '127.0.0.1';
@@ -80,6 +80,19 @@ function buildServer() {
       },
     },
     wrap('dang_ky_moi', dangKyMoi)
+  );
+
+  server.registerTool(
+    'tin_hieu_moi',
+    {
+      title: 'Tín hiệu mới cho heartbeat',
+      description:
+        'Dùng trong heartbeat: trả về đơn vừa thanh toán thành công và người vừa đăng ký khoá học MÀ CHƯA ĐƯỢC BÁO, ' +
+        'kèm tổng hôm nay (đơn, doanh thu, số người đăng ký). Gọi xong là các mục đó bị đánh dấu đã báo, lần sau không trả lại — ' +
+        'nên có kết quả thì phải nhắn chủ ngay. co_tin_moi=false nghĩa là không có gì mới.',
+      inputSchema: {},
+    },
+    wrap('tin_hieu_moi', tinHieuMoi)
   );
 
   return server;

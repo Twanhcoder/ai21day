@@ -1,7 +1,7 @@
 # MCP server — ai21day
 
-Cho agent goClaw 3 tool làm việc thật trên website (xem `../mcp_functions_draft.md`):
-`doi_tieu_de_landing`, `bao_cao_don_hom_nay`, `dang_ky_moi`.
+Cho agent goClaw 4 tool làm việc thật trên website (xem `../mcp_functions_draft.md`):
+`doi_tieu_de_landing`, `bao_cao_don_hom_nay`, `dang_ky_moi`, `tin_hieu_moi` (cho heartbeat — đánh dấu `notified_at` để không báo trùng).
 
 Transport `streamable-http` (stateless), endpoint `POST /mcp`, health check `GET /health`.
 Bắt buộc header `Authorization: Bearer <MCP_TOKEN>`.

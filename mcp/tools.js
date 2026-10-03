@@ -95,4 +95,50 @@ async function dangKyMoi({ so_ngay = 1, gioi_han = 10 } = {}) {
   };
 }
 
-module.exports = { doiTieuDeLanding, baoCaoDonHomNay, dangKyMoi, maskPhone, maskEmail, vnDayStart };
+// Cho heartbeat: lấy đơn đã thanh toán + người đăng ký chưa nhắn, đánh dấu đã nhắn trong cùng 1 lệnh UPDATE
+// (filter notified_at=is.null) → 2 nhịp tim chạy chồng nhau cũng không lấy trùng.
+async function tinHieuMoi() {
+  const claim = { method: 'PATCH', body: { notified_at: new Date().toISOString() }, prefer: 'return=representation' };
+  const [orders, leads] = await Promise.all([
+    db(
+      'orders?status=eq.success&notified_at=is.null' +
+        '&select=code,amount,quantity,paid_at,product:products(name),customer:customers(name)',
+      claim
+    ),
+    db('customers?source=eq.course-form&notified_at=is.null&select=name,phone,email,niche,ai_level,created_at', claim),
+  ]);
+  if (!orders.length && !leads.length) return { co_tin_moi: false };
+
+  const todayStart = vnDayStart(vnToday()).toISOString();
+  const [paidToday, leadsToday] = await Promise.all([
+    db(`orders?select=amount&status=eq.success&paid_at=gte.${todayStart}`),
+    db(`customers?select=id&source=eq.course-form&created_at=gte.${todayStart}`),
+  ]);
+  const byTime = (key) => (a, b) => String(a[key]).localeCompare(String(b[key]));
+  return {
+    co_tin_moi: true,
+    don_moi: orders.sort(byTime('paid_at')).map((o) => ({
+      ma: o.code,
+      khach: o.customer?.name || null,
+      san_pham: o.product?.name || null,
+      so_luong: o.quantity,
+      so_tien: vnd(o.amount),
+      thanh_toan_luc: vnTime(o.paid_at),
+    })),
+    dang_ky_moi: leads.sort(byTime('created_at')).map((c) => ({
+      ten: c.name,
+      sdt: maskPhone(c.phone),
+      email: maskEmail(c.email),
+      linh_vuc: c.niche,
+      trinh_do_ai: c.ai_level,
+      dang_ky_luc: vnTime(c.created_at),
+    })),
+    hom_nay: {
+      don_da_thanh_toan: paidToday.length,
+      doanh_thu: vnd(paidToday.reduce((sum, o) => sum + o.amount, 0)),
+      nguoi_dang_ky: leadsToday.length,
+    },
+  };
+}
+
+module.exports = { doiTieuDeLanding, baoCaoDonHomNay, dangKyMoi, tinHieuMoi, maskPhone, maskEmail, vnDayStart };
