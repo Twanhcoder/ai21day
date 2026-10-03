@@ -771,3 +771,19 @@ html:has(.application-dialog[open]) { overflow: hidden; }
   .course-asset-list--six { grid-template-columns: 1fr 1fr; }
   .course-cv-example { margin-top: 32px; }
 }
+
+/* Headline dài hơn: chữ thật cho công cụ đọc nội dung, cỡ chữ nhỏ lại để dòng 1 vẫn nằm trên một dòng */
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.course-hero h1.course-hero-title--long { max-width: 28ch; font-size: clamp(2.6rem, 4.4vw, 4.6rem); line-height: 1.04; }
+@media (min-width: 901px) {
+  .course-hero h1.course-hero-title--long { max-width: none; font-size: clamp(2.6rem, 4.4vw, 4.6rem); }
+  .course-hero h1.course-hero-title--long > span:nth-child(2) { white-space: nowrap; }
+}
+@media (max-width: 680px) {
+  .course-hero h1.course-hero-title--long { max-width: none; font-size: clamp(1.9rem, 8.4vw, 2.7rem); }
+}
+
+.course-payment-total { margin: 14px 0 0; color: var(--ink); }
+.course-payment ol { display: grid; gap: 10px; margin: 16px 0 0; padding-left: 20px; color: var(--ink-soft); font-size: 0.84rem; }
+.course-payment strong { color: var(--ink); }
+.course-payment-note { margin: 14px 0 0; color: var(--ink-soft); font-size: 0.76rem; }
