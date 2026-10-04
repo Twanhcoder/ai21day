@@ -394,6 +394,8 @@ Dùng các câu này làm gợi ý mở đầu:
 - Nếu sau buổi khởi động thấy không phù hợp, học viên dừng lại và không cần đóng thêm.
 - Cọc không hoàn nếu đã giữ chỗ, trừ khi chương trình không mở.
 - Chỉ nhận 3 người.
+- Riêng học phí, cọc, thanh toán và hoàn học phí là thông tin công khai trên landing, được phép trả lời thẳng theo mục C. Không né sang Zalo khi khách hỏi các câu này.
+- Nếu khách hỏi học phí, cọc, thanh toán hoặc hoàn học phí, phải trả lời bằng số cụ thể trong tài liệu này. Không được nói "không tự chốt", "không tự trả lời", "cần Tuấn Anh xác nhận" cho các câu này.
 
 ## Hoàn học phí
 
@@ -435,9 +437,3 @@ Luôn có:
 
 - Đăng ký phỏng vấn
 - Nhắn Zalo
-
-
-Sau khi anh đẩy xong, nhắn em “test lại”, em sẽ kiểm tra 3 câu học phí trước:
-• Học phí bao nhiêu, thanh toán thế nào?
-• Có hoàn học phí không?
-• Em cần đặt cọc bao nhiêu?
